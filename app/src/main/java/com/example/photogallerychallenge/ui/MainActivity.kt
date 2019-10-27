@@ -1,7 +1,8 @@
-package com.example.photogallerychallenge
+package com.example.photogallerychallenge.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.photogallerychallenge.R
 
 class MainActivity : AppCompatActivity() {
 
