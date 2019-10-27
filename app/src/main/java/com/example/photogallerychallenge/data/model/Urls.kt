@@ -1,4 +1,4 @@
-package com.example.photogallerychallenge.data
+package com.example.photogallerychallenge.data.model
 
 data class Urls(
     val thumb: String?,

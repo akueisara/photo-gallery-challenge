@@ -1,13 +1,14 @@
 package com.example.photogallerychallenge.data.network
 
 import com.example.photogallerychallenge.BuildConfig
-import com.example.photogallerychallenge.data.Photo
+import com.example.photogallerychallenge.data.model.Photo
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
@@ -17,19 +18,20 @@ import java.util.concurrent.TimeUnit
 interface UnsplashApiService {
 
     @GET("photos")
-    suspend fun getPhotos(@Query("client_id") clientId: String = BuildConfig.UNSPLASH_API_ACCESS_KEY,
+    suspend fun getPhotos(@Query("client_id") clientId: String,
                   @Query("page") page: Int?,
-                  @Query("per_page") pageSize: Int?): List<Photo>
+                  @Query("per_page") pageSize: Int?): Response<List<Photo>>
 }
 
 object UnsplashApi {
-    const val BASE_URL = "https://api.unsplash.com/"
+    private const val BASE_URL = "https://api.unsplash.com/"
     private const val API_VER = "v1"
 
     private const val CONTENT_TYPE = "Content-Type"
     private const val APPLICATION_JSON = "application/json"
     private const val ACCEPT_VERSION = "Accept-Version"
-//    private const val AUTHORIZATION = "Authorization"
+
+    const val DEFAULT_PAGE_SIZE = 50
 
     val unsplashApiService : UnsplashApiService by lazy { create() }
 
@@ -41,7 +43,6 @@ object UnsplashApi {
             val newRequest = chain.request().newBuilder()
                 .addHeader(CONTENT_TYPE, APPLICATION_JSON)
                 .addHeader(ACCEPT_VERSION, API_VER)
-//                .addHeader(AUTHORIZATION, BuildConfig.UNSPLASH_API_ACCESS_KEY)
                 .build()
             chain.proceed(newRequest)
         }
@@ -55,8 +56,7 @@ object UnsplashApi {
         .add(KotlinJsonAdapterFactory())
         .build()
 
-    fun create(): UnsplashApiService =
-        create(HttpUrl.parse(BASE_URL)!!)
+    fun create(): UnsplashApiService = create(HttpUrl.parse(BASE_URL)!!)
     fun create(httpUrl: HttpUrl): UnsplashApiService {
         return Retrofit.Builder()
             .baseUrl(httpUrl)

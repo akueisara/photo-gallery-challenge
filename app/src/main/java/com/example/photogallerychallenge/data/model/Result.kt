@@ -1,9 +1,13 @@
-package com.example.photogallerychallenge.data
+/* Reference: The Android Open Source Project https://github.com/googlecodelabs/android-testing */
 
-import com.example.photogallerychallenge.data.Result.Success
+package com.example.photogallerychallenge.data.model
+
+import com.example.photogallerychallenge.data.model.Result.Success
 import com.example.photogallerychallenge.data.network.UnsplashApi
 import com.squareup.moshi.JsonEncodingException
+import okhttp3.ResponseBody
 import retrofit2.HttpException
+import retrofit2.Response
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
@@ -25,7 +29,7 @@ sealed class Result<out R> {
         }
     }
 
-    class UnsplashAPIError(error: Throwable) {
+    class UnsplashAPIError(error: Throwable? = null, errorCode: Int? = null, errorBody: ResponseBody? = null) {
         var code: Int? = null
         var message = "An error occurred"
 
@@ -35,12 +39,11 @@ sealed class Result<out R> {
         }
 
         init {
-            if (error is HttpException) {
-                this.code = error.response()?.code()
-                val errorJsonString = error.response()?.errorBody()?.string() ?: ""
+            if(errorCode != null && errorBody != null) {
+                this.code = errorCode
+                val errorJsonString = errorBody.string()
                 try {
-                    this.message = UnsplashApi.moshi.adapter(
-                        Errors::class.java).fromJson(errorJsonString)?.errors?.get(0)!!
+                    this.message = UnsplashApi.moshi.adapter(Errors::class.java).fromJson(errorJsonString)?.errors?.get(0)!!
                 } catch (e: JsonEncodingException) {
                     this.message = errorJsonString
                 }
@@ -51,7 +54,7 @@ sealed class Result<out R> {
                 this.message =
                     TIME_OUT_ERROR
             } else {
-                this.message = error.message ?: this.message
+                this.message = error?.message ?: this.message
             }
         }
     }

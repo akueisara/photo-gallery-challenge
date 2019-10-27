@@ -1,11 +1,14 @@
 package com.example.photogallerychallenge.api
 
-import com.example.photogallerychallenge.data.*
-import com.example.photogallerychallenge.data.Result.Success
-import com.example.photogallerychallenge.data.Result.Error
+import com.example.photogallerychallenge.BuildConfig
+import com.example.photogallerychallenge.data.model.Result
+import com.example.photogallerychallenge.data.model.*
+import com.example.photogallerychallenge.data.model.Result.Success
+import com.example.photogallerychallenge.data.model.Result.Error
 import com.example.photogallerychallenge.data.network.UnsplashApi
 import com.example.photogallerychallenge.data.network.UnsplashApiService
-import com.example.photogallerychallenge.data.repository.UnsplashDataRepository
+import com.example.photogallerychallenge.data.PhotoDataSource
+import com.example.photogallerychallenge.data.model.succeeded
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -191,10 +194,9 @@ class UnsplashApiServiceTest {
         assertThat((result as Success).data.size, `is`(10))
     }
 
-    suspend fun getPhotos(clientId: String? = null, page: Int? = null, pageSize: Int? = null): Result<List<Photo>> {
-        return UnsplashDataRepository(
-            apiService
-        ).getPhotos(clientId, page, pageSize)
+    suspend fun getPhotos(clientId: String = BuildConfig.UNSPLASH_API_ACCESS_KEY, page: Int? = null, pageSize: Int? = null): Result<List<Photo>> {
+        return PhotoDataSource(apiService)
+            .getPhotos(clientId, page, pageSize)
     }
 
     @Throws(IOException::class)
