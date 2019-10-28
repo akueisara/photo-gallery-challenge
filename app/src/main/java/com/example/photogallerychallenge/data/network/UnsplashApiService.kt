@@ -1,7 +1,9 @@
 package com.example.photogallerychallenge.data.network
 
 import com.example.photogallerychallenge.BuildConfig
+import com.example.photogallerychallenge.data.database.DatabasePhoto
 import com.example.photogallerychallenge.data.model.Photo
+import com.example.photogallerychallenge.data.model.UnsplashAPIError
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -13,6 +15,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 interface UnsplashApiService {
@@ -20,7 +23,7 @@ interface UnsplashApiService {
     @GET("photos")
     suspend fun getPhotos(@Query("client_id") clientId: String,
                   @Query("page") page: Int?,
-                  @Query("per_page") pageSize: Int?): Response<List<Photo>>
+                  @Query("per_page") pageSize: Int?): Response<NetworkPhotoContainer>
 }
 
 object UnsplashApi {
@@ -30,8 +33,6 @@ object UnsplashApi {
     private const val CONTENT_TYPE = "Content-Type"
     private const val APPLICATION_JSON = "application/json"
     private const val ACCEPT_VERSION = "Accept-Version"
-
-    const val DEFAULT_PAGE_SIZE = 50
 
     val unsplashApiService : UnsplashApiService by lazy { create() }
 
@@ -65,5 +66,26 @@ object UnsplashApi {
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
             .create(UnsplashApiService::class.java)
+    }
+}
+
+suspend fun loadPhotos(
+    service: UnsplashApiService,
+    page: Int,
+    itemsPerPage: Int,
+    onSuccess: (networkPhotoContainer: NetworkPhotoContainer) -> Unit,
+    onError: (error: UnsplashAPIError) -> Unit
+) {
+    Timber.d("page: $page, itemsPerPage: $itemsPerPage")
+
+    try {
+        val response = service.getPhotos(BuildConfig.UNSPLASH_API_ACCESS_KEY, page, itemsPerPage)
+        if (response.isSuccessful) {
+            onSuccess(response.body()!!)
+        } else {
+            onError(UnsplashAPIError(null, response.code(), response.errorBody()))
+        }
+    } catch (e: Exception) {
+        onError(UnsplashAPIError(e))
     }
 }

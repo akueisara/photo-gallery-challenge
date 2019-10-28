@@ -1,35 +1,82 @@
 package com.example.photogallerychallenge.ui.photos
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.example.photogallerychallenge.data.network.UnsplashApi
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import com.example.photogallerychallenge.Injection
+import com.example.photogallerychallenge.util.EventObserver
+import com.example.photogallerychallenge.R
 import com.example.photogallerychallenge.databinding.FragmentPhotosBinding
 import com.example.revoluttask.ViewModelFactory
 import timber.log.Timber
 
 class PhotosFragment : Fragment() {
 
-    private val viewModel by viewModels<PhotosViewModel> { ViewModelFactory(UnsplashApi.unsplashApiService) }
+    private val viewModel by viewModels<PhotosViewModel> { ViewModelFactory(Injection.provideUnsplashRepository(context!!)) }
 
     private lateinit var viewDataBinding: FragmentPhotosBinding
 
     private lateinit var listAdapter: PhotosAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         viewDataBinding = FragmentPhotosBinding.inflate(inflater, container, false).apply {
             viewmodel = viewModel
         }
+        setHasOptionsMenu(true)
         return viewDataBinding.root
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) =
+        when (item.itemId) {
+            R.id.menu_refresh -> {
+                viewModel.loadDatebasePhotos()
+                true
+            }
+            else -> false
+        }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_photos_fragment, menu)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
+        setupSnackbar()
         setupListAdapter()
+        setupNavigation()
+        viewModel.databasePhotos.observe(this, Observer {
+            viewModel.getUsers(it.snapshot())
+        })
+        viewModel.users.observe(this, Observer {
+            viewModel.loadPhotos()
+        })
+    }
+
+    private fun setupSnackbar() {
+        viewModel.networkErrors.observe(this, Observer {
+            viewDataBinding.errorTextView.text = it.message
+        })
+    }
+
+    private fun setupNavigation() {
+        viewModel.openPhotoEvent.observe(this,
+            EventObserver {
+                openPhotoDetails(it)
+            })
+    }
+
+    private fun openPhotoDetails(photoId: String) {
+        val action = PhotosFragmentDirections.actionPhotosToPhotoDetail(photoId)
+        findNavController().navigate(action)
     }
 
     private fun setupListAdapter() {

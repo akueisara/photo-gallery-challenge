@@ -1,5 +1,9 @@
 package com.example.photogallerychallenge.data.model
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class User(
     val id: String,
     val updated_at: String,
@@ -15,4 +19,4 @@ data class User(
     val total_photos: Int,
     val total_collections: Int,
     val accepted_tos: Boolean
-)
+): Parcelable

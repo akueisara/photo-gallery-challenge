@@ -1,14 +1,9 @@
 package com.example.photogallerychallenge.api
 
 import com.example.photogallerychallenge.BuildConfig
-import com.example.photogallerychallenge.data.model.Result
 import com.example.photogallerychallenge.data.model.*
-import com.example.photogallerychallenge.data.model.Result.Success
-import com.example.photogallerychallenge.data.model.Result.Error
 import com.example.photogallerychallenge.data.network.UnsplashApi
 import com.example.photogallerychallenge.data.network.UnsplashApiService
-import com.example.photogallerychallenge.data.PhotoDataSource
-import com.example.photogallerychallenge.data.model.succeeded
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -23,6 +18,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.net.HttpURLConnection
 import java.io.*
 import org.junit.Assert.*
+import retrofit2.Response
+import java.lang.Exception
 
 
 class UnsplashApiServiceTest {
@@ -60,11 +57,12 @@ class UnsplashApiServiceTest {
 
         val result = runBlocking { getPhotos("wrong_access_key") }
 
-        assertThat(result.succeeded, `is`(false))
+        assertThat(result.isSuccessful, `is`(false))
 
-        val apiError = result as Error
-        assertThat(apiError.error.code, `is`(HttpURLConnection.HTTP_UNAUTHORIZED))
-        assertThat(apiError.error.message, `is`("OAuth error: The access token is invalid"))
+        val apiError = UnsplashAPIError(errorCode = result.code(), errorBody = result.errorBody())
+
+        assertThat(apiError.code, `is`(HttpURLConnection.HTTP_UNAUTHORIZED))
+        assertThat(apiError.message, `is`("OAuth apiError: The access token is invalid"))
     }
 
     @Test
@@ -77,11 +75,12 @@ class UnsplashApiServiceTest {
 
         val result = runBlocking { getPhotos(page = 1000000000) }
 
-        assertThat(result.succeeded, `is`(false))
+        assertThat(result.isSuccessful, `is`(false))
 
-        val apiError = result as Error
-        assertThat(apiError.error.code, `is`(HttpURLConnection.HTTP_UNAVAILABLE))
-        assertThat(apiError.error.message, `is`("We are experiencing errors. Please check https://status.unsplash.com for updates."))
+        val apiError = UnsplashAPIError(errorCode = result.code(), errorBody = result.errorBody())
+
+        assertThat(apiError.code, `is`(HttpURLConnection.HTTP_UNAVAILABLE))
+        assertThat(apiError.message, `is`("We are experiencing errors. Please check https://status.unsplash.com for updates."))
     }
 
     @Test
@@ -91,10 +90,12 @@ class UnsplashApiServiceTest {
 
         mockWebServer.enqueue(response)
 
-        val result = runBlocking { getPhotos(page = 1000000000) }
-
-        assertThat(result.succeeded, `is`(false))
-        assertThat((result as Error).error.message, `is`(Result.UnsplashAPIError.TIME_OUT_ERROR))
+        try {
+            runBlocking { getPhotos(page = 1000000000) }
+        } catch (e: Exception) {
+            val apiError = UnsplashAPIError(e)
+            assertThat(apiError.message, `is`(UnsplashAPIError.TIME_OUT_ERROR))
+        }
     }
 
     @Test
@@ -105,9 +106,9 @@ class UnsplashApiServiceTest {
         mockWebServer.enqueue(response)
         val result = runBlocking { getPhotos(pageSize = 1) }
 
-        assertThat(result.succeeded, `is`(true))
+        assertThat(result.isSuccessful, `is`(true))
 
-        val photos = (result as Success).data
+        val photos = result.body()!!
         assertThat(photos.size, `is`(1))
 
         val urls = Urls(
@@ -190,13 +191,12 @@ class UnsplashApiServiceTest {
 
         val result = runBlocking { getPhotos() }
 
-        assertThat(result.succeeded, `is`(true))
-        assertThat((result as Success).data.size, `is`(10))
+        assertThat(result.isSuccessful, `is`(true))
+        assertThat(result.body()!!.size, `is`(10))
     }
 
-    suspend fun getPhotos(clientId: String = BuildConfig.UNSPLASH_API_ACCESS_KEY, page: Int? = null, pageSize: Int? = null): Result<List<Photo>> {
-        return PhotoDataSource(apiService)
-            .getPhotos(clientId, page, pageSize)
+    suspend fun getPhotos(clientId: String = BuildConfig.UNSPLASH_API_ACCESS_KEY, page: Int? = null, pageSize: Int? = null): Response<List<Photo>> {
+        return apiService.getPhotos(clientId, page, pageSize)
     }
 
     @Throws(IOException::class)
