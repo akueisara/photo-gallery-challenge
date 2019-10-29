@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <import type="android.view.View" />
+
+        <import type="com.example.photogallerychallenge.util.Converter" />
+
         <variable
             name="photo"
-            type="com.example.photogallerychallenge.data.model.Photo" />
+            type="com.example.photogallerychallenge.data.database.DatabasePhoto" />
 
         <variable
             name="viewmodel"
@@ -13,17 +19,67 @@
 
     </data>
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/user_name"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{photo.user.name}"/>
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    app:roundImageUrl="@{photo.user_profile_image_url}"
+                    tools:src="@android:drawable/star_big_off" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="@{photo.user_name}"
+                    android:textColor="#111111"
+                    android:textSize="18sp"
+                    tools:text="Kuei Jung Hu" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/roboto"
+                android:text="@{photo.description}"
+                android:textColor="#767676"
+                android:visibility="@{photo.description.length() == 0 ? View.GONE : View.VISIBLE}"
+                tools:text="Kuei Jung Hu" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:onClick="@{() -> viewmodel.openPhoto(photo.id)}"
+                android:scaleType="centerCrop"
+                app:backgroundHexColor="@{photo.color}"
+                app:imageUrl="@{photo.urls.regular}"
+                tools:src="@tools:sample/avatars" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 
 </layout>
