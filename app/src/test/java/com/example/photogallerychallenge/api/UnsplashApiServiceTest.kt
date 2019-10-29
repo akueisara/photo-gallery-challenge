@@ -2,7 +2,7 @@ package com.example.photogallerychallenge.api
 
 import com.example.photogallerychallenge.BuildConfig
 import com.example.photogallerychallenge.data.model.*
-import com.example.photogallerychallenge.data.model.errors.UnsplashAPIError
+import com.example.photogallerychallenge.data.network.UnsplashAPIError
 import com.example.photogallerychallenge.data.network.NetworkPhotoContainer
 import com.example.photogallerychallenge.data.network.UnsplashApi
 import com.example.photogallerychallenge.data.network.UnsplashApiService
@@ -24,7 +24,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
-import java.lang.Exception
 
 
 class UnsplashApiServiceTest {
@@ -202,7 +201,11 @@ class UnsplashApiServiceTest {
             object : Callback<List<Photo>> {
                 override fun onFailure(call: Call<List<Photo>>?, t: Throwable) {
                     Timber.d( "fail to get data")
-                    onError?.let { it(UnsplashAPIError(t)) }
+                    onError?.let { it(
+                        UnsplashAPIError(
+                            t
+                        )
+                    ) }
                 }
 
                 override fun onResponse(
@@ -214,7 +217,12 @@ class UnsplashApiServiceTest {
                         val repos = response.body() ?: emptyList()
                         onSuccess?.let { it(NetworkPhotoContainer(repos)) }
                     } else {
-                        onError?.let { it(UnsplashAPIError(errorCode = response.code(), errorBody = response.errorBody())) }
+                        onError?.let { it(
+                            UnsplashAPIError(
+                                errorCode = response.code(),
+                                errorBody = response.errorBody()
+                            )
+                        ) }
                     }
                 }
             })

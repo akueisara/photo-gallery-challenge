@@ -1,4 +1,4 @@
-package com.example.photogallerychallenge.data.database
+package com.example.photogallerychallenge.data.local.database
 
 import androidx.paging.DataSource
 import androidx.room.Dao

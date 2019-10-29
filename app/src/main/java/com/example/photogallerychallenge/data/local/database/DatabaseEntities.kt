@@ -1,10 +1,8 @@
-package com.example.photogallerychallenge.data.database
+package com.example.photogallerychallenge.data.local.database
 
 import androidx.room.*
 import com.example.photogallerychallenge.data.model.Links
-import com.example.photogallerychallenge.data.model.Photo
 import com.example.photogallerychallenge.data.model.Urls
-import com.example.photogallerychallenge.data.model.User
 
 @Entity(tableName = "photos")
 data class DatabasePhoto constructor(

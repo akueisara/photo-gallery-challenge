@@ -2,7 +2,6 @@ package com.example.photogallerychallenge.data.network
 
 import com.example.photogallerychallenge.BuildConfig
 import com.example.photogallerychallenge.data.model.Photo
-import com.example.photogallerychallenge.data.model.errors.UnsplashAPIError
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -95,7 +94,12 @@ fun loadPhotos(
                         val repos = response.body() ?: emptyList()
                         onSuccess(NetworkPhotoContainer(repos))
                     } else {
-                        onError(UnsplashAPIError(errorCode = response.code(), errorBody = response.errorBody()))
+                        onError(
+                            UnsplashAPIError(
+                                errorCode = response.code(),
+                                errorBody = response.errorBody()
+                            )
+                        )
                     }
                 }
             })

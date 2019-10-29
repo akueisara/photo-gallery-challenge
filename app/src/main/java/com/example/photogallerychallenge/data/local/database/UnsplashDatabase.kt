@@ -1,10 +1,9 @@
-package com.example.photogallerychallenge.data.database
+package com.example.photogallerychallenge.data.local.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.photogallerychallenge.data.model.Photo
 
 @Database(
     entities = [DatabasePhoto::class, DatabaseUser::class],

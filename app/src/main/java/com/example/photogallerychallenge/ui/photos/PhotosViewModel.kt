@@ -2,10 +2,10 @@ package com.example.photogallerychallenge.ui.photos
 
 import androidx.lifecycle.*
 import androidx.paging.PagedList
-import com.example.photogallerychallenge.data.database.DatabasePhoto
+import com.example.photogallerychallenge.data.local.database.DatabasePhoto
 import com.example.photogallerychallenge.util.Event
-import com.example.photogallerychallenge.data.model.LoadPhotoResult
-import com.example.photogallerychallenge.data.model.errors.UnsplashAPIError
+import com.example.photogallerychallenge.data.network.LoadPhotoResult
+import com.example.photogallerychallenge.data.network.UnsplashAPIError
 import com.example.photogallerychallenge.repository.UnsplashRepository
 
 class PhotosViewModel(private val repository: UnsplashRepository) : ViewModel() {
@@ -29,7 +29,6 @@ class PhotosViewModel(private val repository: UnsplashRepository) : ViewModel() 
     fun refreshLoadPhotos() {
         photos.value?.dataSource?.invalidate()
     }
-
 
     fun openPhoto(photoId: String) {
         _openPhotoEvent.value = Event(photoId)

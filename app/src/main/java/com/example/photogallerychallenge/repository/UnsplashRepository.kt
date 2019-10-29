@@ -2,10 +2,10 @@ package com.example.photogallerychallenge.repository
 
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.example.photogallerychallenge.data.PhotoBoundaryCallback
-import com.example.photogallerychallenge.data.database.DatabaseUser
-import com.example.photogallerychallenge.data.database.UnsplashLocalCache
-import com.example.photogallerychallenge.data.model.LoadPhotoResult
+import com.example.photogallerychallenge.data.repository.PhotoBoundaryCallback
+import com.example.photogallerychallenge.data.local.database.DatabaseUser
+import com.example.photogallerychallenge.data.local.database.UnsplashLocalCache
+import com.example.photogallerychallenge.data.network.LoadPhotoResult
 import com.example.photogallerychallenge.data.network.UnsplashApiService
 import timber.log.Timber
 
@@ -16,7 +16,8 @@ class UnsplashRepository(private val service: UnsplashApiService, private val ca
 
         val dataSourceFactory = cache.getPhotos()
 
-        val boundaryCallback = PhotoBoundaryCallback(service, cache)
+        val boundaryCallback =
+            PhotoBoundaryCallback(service, cache)
         val networkErrors = boundaryCallback.networkErrors
 
 

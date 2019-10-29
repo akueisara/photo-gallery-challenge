@@ -1,16 +1,13 @@
-package com.example.photogallerychallenge.data
+package com.example.photogallerychallenge.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
-import com.example.photogallerychallenge.data.database.DatabasePhoto
-import com.example.photogallerychallenge.data.database.UnsplashLocalCache
-import com.example.photogallerychallenge.data.model.errors.UnsplashAPIError
+import com.example.photogallerychallenge.data.local.database.DatabasePhoto
+import com.example.photogallerychallenge.data.local.database.UnsplashLocalCache
+import com.example.photogallerychallenge.data.network.UnsplashAPIError
 import com.example.photogallerychallenge.data.network.UnsplashApiService
 import com.example.photogallerychallenge.data.network.loadPhotos
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class PhotoBoundaryCallback(private val service: UnsplashApiService, private val cache: UnsplashLocalCache) : PagedList.BoundaryCallback<DatabasePhoto>() {
@@ -41,7 +38,8 @@ class PhotoBoundaryCallback(private val service: UnsplashApiService, private val
         if (isRequestInProgress) return
 
         isRequestInProgress = true
-        loadPhotos(service, lastRequestedPage, NETWORK_PAGE_SIZE, { networkPhotoContainer ->
+        loadPhotos(service, lastRequestedPage,
+            NETWORK_PAGE_SIZE, { networkPhotoContainer ->
             cache.insert(networkPhotoContainer) {
                 lastRequestedPage++
                 isRequestInProgress = false

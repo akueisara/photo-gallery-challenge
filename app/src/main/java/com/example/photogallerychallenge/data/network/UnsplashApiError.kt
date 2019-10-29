@@ -1,6 +1,6 @@
-package com.example.photogallerychallenge.data.model.errors
+package com.example.photogallerychallenge.data.network
 
-import com.example.photogallerychallenge.data.network.UnsplashApi
+import com.example.photogallerychallenge.data.model.Errors
 import com.squareup.moshi.JsonEncodingException
 import okhttp3.ResponseBody
 import java.net.SocketTimeoutException

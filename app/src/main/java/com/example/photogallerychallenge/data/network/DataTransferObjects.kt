@@ -1,7 +1,7 @@
 package com.example.photogallerychallenge.data.network
 
-import com.example.photogallerychallenge.data.database.DatabasePhoto
-import com.example.photogallerychallenge.data.database.DatabaseUser
+import com.example.photogallerychallenge.data.local.database.DatabasePhoto
+import com.example.photogallerychallenge.data.local.database.DatabaseUser
 import com.example.photogallerychallenge.data.model.Photo
 import com.example.photogallerychallenge.data.model.User
 import com.squareup.moshi.JsonClass

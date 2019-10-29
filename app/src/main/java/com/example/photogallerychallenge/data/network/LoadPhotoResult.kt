@@ -1,9 +1,8 @@
-package com.example.photogallerychallenge.data.model
+package com.example.photogallerychallenge.data.network
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
-import com.example.photogallerychallenge.data.database.DatabasePhoto
-import com.example.photogallerychallenge.data.model.errors.UnsplashAPIError
+import com.example.photogallerychallenge.data.local.database.DatabasePhoto
 
 data class LoadPhotoResult(
     val data: LiveData<PagedList<DatabasePhoto>>,

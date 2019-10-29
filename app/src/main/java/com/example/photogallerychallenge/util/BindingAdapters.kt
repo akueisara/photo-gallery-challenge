@@ -1,5 +1,6 @@
 package com.example.photogallerychallenge.util
 
+import android.content.res.Resources
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
@@ -8,14 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.example.photogallerychallenge.data.model.Photo
 import com.example.photogallerychallenge.ui.photos.PhotosAdapter
 import android.graphics.Color
 import androidx.core.content.ContextCompat
-import com.example.photogallerychallenge.R
-import com.example.photogallerychallenge.data.database.DatabasePhoto
+import com.example.photogallerychallenge.data.local.database.DatabasePhoto
 import timber.log.Timber
-
+import com.example.photogallerychallenge.R
 
 @BindingAdapter("app:items")
 fun setItems(listView: RecyclerView, items: PagedList<DatabasePhoto>?) {
@@ -28,9 +27,10 @@ fun setItems(listView: RecyclerView, items: PagedList<DatabasePhoto>?) {
 fun setImageUrl(imageView: ImageView, url: String?) {
     Glide.with(imageView.context)
         .load(url)
-        .diskCacheStrategy( DiskCacheStrategy.ALL )
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
         .into(imageView)
 }
+
 
 @BindingAdapter("roundImageUrl")
 fun setRoundImageUrl(imageView: ImageView, url: String?) {

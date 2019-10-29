@@ -7,4 +7,8 @@
         android:icon="@drawable/ic_refresh"
         android:title="Refresh"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/menu_view_type"
+        app:showAsAction="ifRoom"/>
 </menu>

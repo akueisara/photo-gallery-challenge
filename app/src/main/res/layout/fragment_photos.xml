@@ -21,14 +21,12 @@
         tools:context=".ui.photos.PhotosFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/photos_list"
+            android:id="@+id/photos_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="@{viewmodel.photos.size() > 0  ? View.VISIBLE : View.GONE}"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:scrollbars="vertical"
             app:items="@{viewmodel.photos}"
-            tools:listitem="@layout/photo_item" />
+            tools:listitem="@layout/list_photo_item" />
 
 
         <TextView

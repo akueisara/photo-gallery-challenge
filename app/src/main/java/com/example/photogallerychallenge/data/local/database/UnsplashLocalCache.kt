@@ -1,7 +1,6 @@
-package com.example.photogallerychallenge.data.database
+package com.example.photogallerychallenge.data.local.database
 
 import androidx.paging.DataSource
-import com.example.photogallerychallenge.data.model.Photo
 import com.example.photogallerychallenge.data.network.NetworkPhotoContainer
 import com.example.photogallerychallenge.data.network.asDatabaseModel
 import com.example.photogallerychallenge.data.network.asDomainModel
