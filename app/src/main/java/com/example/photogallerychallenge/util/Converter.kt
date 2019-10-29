@@ -1,6 +1,6 @@
 package com.example.photogallerychallenge.util
 
-import com.example.photogallerychallenge.data.model.UnsplashAPIError
+import com.example.photogallerychallenge.data.model.errors.UnsplashAPIError
 
 
 object Converter {

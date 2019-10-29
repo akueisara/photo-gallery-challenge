@@ -1,4 +1,4 @@
-package com.example.photogallerychallenge.data.model
+package com.example.photogallerychallenge.data.model.errors
 
 import com.example.photogallerychallenge.data.network.UnsplashApi
 import com.squareup.moshi.JsonEncodingException
@@ -8,7 +8,7 @@ import java.net.UnknownHostException
 
 class UnsplashAPIError(error: Throwable? = null, errorCode: Int? = null, errorBody: ResponseBody? = null) {
     var code: Int? = null
-    var message = "An apiError occurred"
+    var message = "Unknown error"
 
     companion object {
         const val SERVER_CONNECTION_ERROR = "There was a network error.\nPlease check your internet connection."

@@ -26,7 +26,7 @@ class PhotosAdapter(private val viewModel: PhotosViewModel) : PagedListAdapter<D
 
         fun bind(viewModel: PhotosViewModel, item: DatabasePhoto) {
             binding.viewmodel = viewModel
-            binding.databasePhoto = item
+            binding.photo = item
             binding.executePendingBindings()
         }
 

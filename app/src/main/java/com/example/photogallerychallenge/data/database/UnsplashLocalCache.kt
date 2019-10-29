@@ -13,26 +13,19 @@ class UnsplashLocalCache(private val unsplashDao: UnsplashDao, private val ioExe
     fun insert(networkPhotoContainer: NetworkPhotoContainer, insertFinished: () -> Unit) {
         ioExecutor.execute {
             Timber.d("inserting ${networkPhotoContainer.asDatabaseModel().size} photos")
-            unsplashDao.insertPhotos(networkPhotoContainer.asDatabaseModel())
+            unsplashDao.insertPhotos(*networkPhotoContainer.asDatabaseModel())
             for(photo in networkPhotoContainer.asDomainModel()) {
-                Timber.d("inserting user ${photo.user}")
-                unsplashDao.insertUser(photo.user.asDomainModel())
+                unsplashDao.insertUser(photo.user.asDatabaseModel())
             }
             insertFinished()
         }
     }
 
-    suspend fun getPhotos(): DataSource.Factory<Int, DatabasePhoto> {
+    fun getPhotos(): DataSource.Factory<Int, DatabasePhoto> {
         return unsplashDao.getPhotos()
     }
 
-    suspend fun getUsers(photos: List<DatabasePhoto>): List<DatabaseUser> {
-        val users = mutableListOf<DatabaseUser>()
-        for (photo in photos) {
-            unsplashDao.getUserById(photo.user_id)?.let {
-                users.add(it)
-            }
-        }
-        return users
+    fun getUser(userId: String): DatabaseUser? {
+        return unsplashDao.getUserById(userId)
     }
 }

@@ -5,8 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import com.example.photogallerychallenge.data.database.DatabasePhoto
 import com.example.photogallerychallenge.data.database.UnsplashLocalCache
-import com.example.photogallerychallenge.data.model.Photo
-import com.example.photogallerychallenge.data.model.UnsplashAPIError
+import com.example.photogallerychallenge.data.model.errors.UnsplashAPIError
 import com.example.photogallerychallenge.data.network.UnsplashApiService
 import com.example.photogallerychallenge.data.network.loadPhotos
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +16,7 @@ import timber.log.Timber
 class PhotoBoundaryCallback(private val service: UnsplashApiService, private val cache: UnsplashLocalCache) : PagedList.BoundaryCallback<DatabasePhoto>() {
 
     companion object {
-        private const val NETWORK_PAGE_SIZE = 50
+        private const val NETWORK_PAGE_SIZE = 30
     }
 
     private var lastRequestedPage = 1
@@ -30,19 +29,15 @@ class PhotoBoundaryCallback(private val service: UnsplashApiService, private val
 
     override fun onZeroItemsLoaded() {
         Timber.d("onZeroItemsLoaded")
-        GlobalScope.launch(Dispatchers.Main) {
-            requestAndSaveData()
-        }
+        requestAndSaveData()
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: DatabasePhoto) {
         Timber.d("onItemAtEndLoaded")
-        GlobalScope.launch(Dispatchers.Main) {
-            requestAndSaveData()
-        }
+        requestAndSaveData()
     }
 
-    private suspend fun requestAndSaveData() {
+    private fun requestAndSaveData() {
         if (isRequestInProgress) return
 
         isRequestInProgress = true

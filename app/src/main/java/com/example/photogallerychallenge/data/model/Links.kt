@@ -9,7 +9,8 @@ data class Links(
     val self: String,
     val html: String,
     val photos: String?,
-    @ColumnInfo(name = "link_likes") val likes: String?,
+    @ColumnInfo(name = "link_likes")
+    val likes: String?,
     val portfolio: String?,
     val download: String?,
     val download_location: String?,

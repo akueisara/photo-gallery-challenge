@@ -7,10 +7,10 @@
 
         <import type="android.view.View" />
 
-        <import type="com.example.photogallerychallenge.util.Converter"/>
+        <import type="com.example.photogallerychallenge.util.Converter" />
 
         <variable
-            name="databasePhoto"
+            name="photo"
             type="com.example.photogallerychallenge.data.database.DatabasePhoto" />
 
         <variable
@@ -40,15 +40,16 @@
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    app:roundImageUrl="@{photo.user.profile_image.small}"
+                    app:roundImageUrl="@{photo.user_profile_image_url}"
                     tools:src="@android:drawable/star_big_off" />
+
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:fontFamily="@font/roboto_medium"
-                    android:text="@{photo.user.name}"
+                    android:text="@{photo.user_name}"
                     android:textColor="#111111"
                     android:textSize="18sp"
                     tools:text="Kuei Jung Hu" />
@@ -63,19 +64,19 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/roboto"
+                android:text="@{photo.description}"
                 android:textColor="#767676"
-                android:text="@{databasePhoto.description}"
-                android:visibility="@{databasePhoto.description.length() == 0 ? View.GONE : View.VISIBLE}"
+                android:visibility="@{photo.description.length() == 0 ? View.GONE : View.VISIBLE}"
                 tools:text="Kuei Jung Hu" />
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
+                android:onClick="@{() -> viewmodel.openPhoto(photo.id)}"
                 android:scaleType="centerCrop"
-                app:backgroundHexColor="@{databasePhoto.color}"
-                app:imageUrl="@{databasePhoto.urls.regular}"
-                tools:src="@tools:sample/avatars"
-                android:onClick="@{() -> viewmodel.openPhoto(databasePhoto.id)}"/>
+                app:backgroundHexColor="@{photo.color}"
+                app:imageUrl="@{photo.urls.regular}"
+                tools:src="@tools:sample/avatars" />
 
         </LinearLayout>
 

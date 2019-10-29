@@ -25,9 +25,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="@{viewmodel.photos.size() > 0  ? View.VISIBLE : View.GONE}"
-            app:items="@{viewmodel.photos}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:scrollbars="vertical"
+            app:items="@{viewmodel.photos}"
             tools:listitem="@layout/photo_item" />
+
 
         <TextView
             android:id="@+id/error_textView"
@@ -42,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="@{viewmodel.dataLoading != null &amp;&amp; viewmodel.dataLoading ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{viewmodel.dataLoading ? View.VISIBLE : View.GONE}" />
 
     </FrameLayout>
 

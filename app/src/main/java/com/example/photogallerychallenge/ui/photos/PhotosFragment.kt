@@ -6,9 +6,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagedList
 import com.example.photogallerychallenge.Injection
 import com.example.photogallerychallenge.util.EventObserver
 import com.example.photogallerychallenge.R
+import com.example.photogallerychallenge.data.database.DatabasePhoto
 import com.example.photogallerychallenge.databinding.FragmentPhotosBinding
 import com.example.revoluttask.ViewModelFactory
 import timber.log.Timber
@@ -36,7 +38,7 @@ class PhotosFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem) =
         when (item.itemId) {
             R.id.menu_refresh -> {
-                viewModel.loadDatebasePhotos()
+                viewModel.refreshLoadPhotos()
                 true
             }
             else -> false
@@ -50,28 +52,15 @@ class PhotosFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
-        setupSnackbar()
-        setupListAdapter()
+        initListAdapter()
         setupNavigation()
-        viewModel.databasePhotos.observe(this, Observer {
-            viewModel.getUsers(it.snapshot())
-        })
-        viewModel.users.observe(this, Observer {
-            viewModel.loadPhotos()
-        })
     }
 
-    private fun setupSnackbar() {
-        viewModel.networkErrors.observe(this, Observer {
-            viewDataBinding.errorTextView.text = it.message
-        })
-    }
 
     private fun setupNavigation() {
-        viewModel.openPhotoEvent.observe(this,
-            EventObserver {
+        viewModel.openPhotoEvent.observe(this, EventObserver {
                 openPhotoDetails(it)
-            })
+        })
     }
 
     private fun openPhotoDetails(photoId: String) {
@@ -79,11 +68,18 @@ class PhotosFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    private fun setupListAdapter() {
+    private fun initListAdapter() {
         val viewModel = viewDataBinding.viewmodel
         if (viewModel != null) {
             listAdapter = PhotosAdapter(viewModel)
             viewDataBinding.photosList.adapter = listAdapter
+            viewModel.photos.observe(this, Observer<PagedList<DatabasePhoto>> {
+                Timber.d("list: ${it?.size}")
+                listAdapter.submitList(it)
+            })
+            viewModel.networkErrors.observe(this, Observer {
+                viewDataBinding.errorTextView.text = it.message
+            })
         } else {
             Timber.w("ViewModel not initialized when attempting to set up adapter.")
         }
