@@ -4,17 +4,17 @@ import androidx.lifecycle.*
 import androidx.paging.PagedList
 import com.example.photogallerychallenge.data.local.database.DatabasePhoto
 import com.example.photogallerychallenge.util.Event
-import com.example.photogallerychallenge.data.network.LoadPhotoResult
+import com.example.photogallerychallenge.data.network.LoadPhotosResult
 import com.example.photogallerychallenge.data.network.UnsplashAPIError
 import com.example.photogallerychallenge.repository.UnsplashRepository
 
 class PhotosViewModel(private val repository: UnsplashRepository) : ViewModel() {
 
-    private val _loadPhotoResult = MutableLiveData<LoadPhotoResult>()
-    val loadPhotoResult: LiveData<LoadPhotoResult> = _loadPhotoResult
+    private val _loadPhotosResult = MutableLiveData<LoadPhotosResult>()
+    private val loadPhotosResult: LiveData<LoadPhotosResult> = _loadPhotosResult
 
-    val photos: LiveData<PagedList<DatabasePhoto>> = Transformations.switchMap(loadPhotoResult) { it -> it.data }
-    val networkErrors: LiveData<UnsplashAPIError> = Transformations.switchMap(loadPhotoResult) { it -> it.networkErrors }
+    val photos: LiveData<PagedList<DatabasePhoto>> = Transformations.switchMap(loadPhotosResult) { it.data }
+    val networkErrors: LiveData<UnsplashAPIError> = Transformations.switchMap(loadPhotosResult) { it.networkErrors }
 
     private val _openPhotoEvent = MutableLiveData<Event<String>>()
     val openPhotoEvent: LiveData<Event<String>> = _openPhotoEvent
@@ -23,7 +23,7 @@ class PhotosViewModel(private val repository: UnsplashRepository) : ViewModel() 
     val dataLoading: LiveData<Boolean> = _dataLoading
 
     init {
-        _loadPhotoResult.value = repository.loadPhotos()
+        _loadPhotosResult.value = repository.loadPhotos()
     }
 
     fun refreshLoadPhotos() {

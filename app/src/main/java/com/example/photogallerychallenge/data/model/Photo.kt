@@ -18,5 +18,9 @@ data class Photo(
     val links: Links,
     val likes: Int,
     var liked_by_user: Boolean,
-    val user: User
+    val user: User,
+    val exif: ExtraInfo?,
+    val location: Location?,
+    val views: Long?,
+    val downloads: Long?
 ): Parcelable

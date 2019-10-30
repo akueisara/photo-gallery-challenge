@@ -3,7 +3,7 @@ package com.example.photogallerychallenge.api
 import com.example.photogallerychallenge.BuildConfig
 import com.example.photogallerychallenge.data.model.*
 import com.example.photogallerychallenge.data.network.UnsplashAPIError
-import com.example.photogallerychallenge.data.network.NetworkPhotoContainer
+import com.example.photogallerychallenge.data.NetworkPhotosContainer
 import com.example.photogallerychallenge.data.network.UnsplashApi
 import com.example.photogallerychallenge.data.network.UnsplashApiService
 import kotlinx.coroutines.runBlocking
@@ -176,7 +176,7 @@ class UnsplashApiServiceTest {
                     "TYpX940GS_U", "2019-10-26T02:47:19-04:00",
                     "2019-10-26T04:23:34-04:00", "2019-10-26T04:23:34-04:00",
                     2026, 3602, "#233961", "Infinity Dunes - Abu Dhabi Desert", null,
-                    urls, links, 70, false, user
+                    urls, links, 70, false, user, null, null, null, null
                 )
             ))
         })
@@ -195,8 +195,8 @@ class UnsplashApiServiceTest {
         })
     }
 
-    fun getPhotos(clientId: String = BuildConfig.UNSPLASH_API_ACCESS_KEY, page: Int? = null, pageSize: Int? = null, onSuccess: ((networkPhotoContainer: NetworkPhotoContainer) -> Unit)? = null,
-                          onError: ((error: UnsplashAPIError) -> Unit)? = null) {
+    fun getPhotos(clientId: String = BuildConfig.UNSPLASH_API_ACCESS_KEY, page: Int? = null, pageSize: Int? = null, onSuccess: ((networkPhotosContainer: NetworkPhotosContainer) -> Unit)? = null,
+                  onError: ((error: UnsplashAPIError) -> Unit)? = null) {
         apiService.getPhotos(clientId, page, pageSize).enqueue(
             object : Callback<List<Photo>> {
                 override fun onFailure(call: Call<List<Photo>>?, t: Throwable) {
@@ -215,7 +215,11 @@ class UnsplashApiServiceTest {
                     Timber.d("got a response $response")
                     if (response.isSuccessful) {
                         val repos = response.body() ?: emptyList()
-                        onSuccess?.let { it(NetworkPhotoContainer(repos)) }
+                        onSuccess?.let { it(
+                            NetworkPhotosContainer(
+                                repos
+                            )
+                        ) }
                     } else {
                         onError?.let { it(
                             UnsplashAPIError(

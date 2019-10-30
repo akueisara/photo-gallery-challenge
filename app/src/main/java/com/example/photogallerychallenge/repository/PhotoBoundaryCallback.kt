@@ -1,4 +1,4 @@
-package com.example.photogallerychallenge.data.repository
+package com.example.photogallerychallenge.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

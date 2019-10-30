@@ -1,8 +1,7 @@
 package com.example.photogallerychallenge.data.local.database
 
 import androidx.room.*
-import com.example.photogallerychallenge.data.model.Links
-import com.example.photogallerychallenge.data.model.Urls
+import com.example.photogallerychallenge.data.model.*
 
 @Entity(tableName = "photos")
 data class DatabasePhoto constructor(
@@ -22,7 +21,11 @@ data class DatabasePhoto constructor(
     var liked_by_user: Boolean,
     val user_id: String,
     var user_name: String,
-    var user_profile_image_url: String?)
+    var user_profile_image_url: String?,
+    @Embedded var exif: ExtraInfo?,
+    @Embedded val location: Location?,
+    val views: Long?,
+    val downloads: Long?)
 
 @Entity(tableName = "users")
 data class DatabaseUser constructor(

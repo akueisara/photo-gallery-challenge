@@ -1,6 +1,5 @@
 package com.example.photogallerychallenge.util
 
-import android.content.res.Resources
 import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
@@ -25,26 +24,30 @@ fun setItems(listView: RecyclerView, items: PagedList<DatabasePhoto>?) {
 
 @BindingAdapter("imageUrl")
 fun setImageUrl(imageView: ImageView, url: String?) {
-    Glide.with(imageView.context)
-        .load(url)
-        .diskCacheStrategy(DiskCacheStrategy.ALL)
-        .into(imageView)
+    url?.let {
+        Glide.with(imageView.context)
+            .load(url)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .into(imageView)
+    }
 }
 
 
 @BindingAdapter("roundImageUrl")
 fun setRoundImageUrl(imageView: ImageView, url: String?) {
-    Glide.with(imageView.context)
-        .load(url)
-        .apply(RequestOptions.circleCropTransform())
-        .placeholder(R.drawable.ic_default_avatar)
-        .into(imageView)
+    url?.let {
+        Glide.with(imageView.context)
+            .load(url)
+            .apply(RequestOptions.circleCropTransform())
+            .placeholder(R.drawable.ic_default_avatar)
+            .into(imageView)
+    }
 }
 
 @BindingAdapter("backgroundHexColor")
-fun setHexColor(view: View, hex: String) {
+fun setHexColor(view: View, hex: String?) {
     try {
-        view.setBackgroundColor(Color.parseColor(hex))
+        hex?.let { view.setBackgroundColor(Color.parseColor(hex)) }
     } catch (e: Exception) {
         Timber.e(e)
         view.setBackgroundColor(ContextCompat.getColor(view.context, android.R.color.black))

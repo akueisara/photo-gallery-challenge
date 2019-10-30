@@ -1,4 +1,4 @@
-package com.example.photogallerychallenge.data.network
+package com.example.photogallerychallenge.data
 
 import com.example.photogallerychallenge.data.local.database.DatabasePhoto
 import com.example.photogallerychallenge.data.local.database.DatabaseUser
@@ -6,10 +6,11 @@ import com.example.photogallerychallenge.data.model.Photo
 import com.example.photogallerychallenge.data.model.User
 import com.squareup.moshi.JsonClass
 
+// PHOTOS
 @JsonClass(generateAdapter = true)
-data class NetworkPhotoContainer(val photos: List<Photo>)
+data class NetworkPhotosContainer(val photos: List<Photo>)
 
-fun NetworkPhotoContainer.asDomainModel(): List<Photo> {
+fun NetworkPhotosContainer.asDomainModel(): List<Photo> {
     return photos.map {
         Photo(
             id = it.id,
@@ -25,12 +26,16 @@ fun NetworkPhotoContainer.asDomainModel(): List<Photo> {
             links = it.links,
             likes = it.likes,
             liked_by_user = it.liked_by_user,
-            user = it.user
+            user = it.user,
+            exif = it.exif,
+            location = it.location,
+            views =  it.views,
+            downloads= it.downloads
         )
     }
 }
 
-fun NetworkPhotoContainer.asDatabaseModel(): Array<DatabasePhoto> {
+fun NetworkPhotosContainer.asDatabaseModel(): Array<DatabasePhoto> {
     return photos.map {
         DatabasePhoto(
             id = it.id,
@@ -48,11 +53,68 @@ fun NetworkPhotoContainer.asDatabaseModel(): Array<DatabasePhoto> {
             liked_by_user = it.liked_by_user,
             user_id = it.user.id,
             user_name = it.user.name,
-            user_profile_image_url = it.user.profile_image.small
+            user_profile_image_url = it.user.profile_image.small,
+            exif = it.exif,
+            location = it.location,
+            views =  it.views,
+            downloads= it.downloads
         )
     }.toTypedArray()
 }
 
+// PHOTO
+@JsonClass(generateAdapter = true)
+data class NetworkPhotoContainer(val photo: Photo)
+
+fun NetworkPhotoContainer.asDatabaseModel(): DatabasePhoto {
+    return DatabasePhoto(
+        id = photo.id,
+        created_at = photo.created_at,
+        updated_at = photo.updated_at,
+        promoted_at = photo.promoted_at,
+        width = photo.width,
+        height = photo.height,
+        color = photo.color,
+        description = photo.description,
+        alt_description = photo.alt_description,
+        urls = photo.urls,
+        links = photo.links,
+        likes =  photo.likes,
+        liked_by_user = photo.liked_by_user,
+        user_id = photo.user.id,
+        user_name = photo.user.name,
+        user_profile_image_url = photo.user.profile_image.small,
+        exif = photo.exif,
+        location = photo.location,
+        views =  photo.views,
+        downloads= photo.downloads
+    )
+}
+
+fun NetworkPhotoContainer.asDomainModel(): Photo {
+    return Photo(
+        id = photo.id,
+        created_at = photo.created_at,
+        updated_at = photo.updated_at,
+        promoted_at = photo.promoted_at,
+        width = photo.width,
+        height = photo.height,
+        color = photo.color,
+        description = photo.description,
+        alt_description = photo.alt_description,
+        urls = photo.urls,
+        links = photo.links,
+        likes = photo.likes,
+        liked_by_user = photo.liked_by_user,
+        user = photo.user,
+        exif = photo.exif,
+        location = photo.location,
+        views =  photo.views,
+        downloads= photo.downloads
+    )
+}
+
+// USER
 fun User.asDatabaseModel(): DatabaseUser {
     return DatabaseUser(
         id = id,

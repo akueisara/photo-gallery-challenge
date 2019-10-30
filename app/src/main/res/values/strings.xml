@@ -3,4 +3,6 @@
 
     <string name="show_list">Show List</string>
     <string name="show_grid">Show Grid</string>
+
+    <string name="dimensions">%d x %d</string>
 </resources>

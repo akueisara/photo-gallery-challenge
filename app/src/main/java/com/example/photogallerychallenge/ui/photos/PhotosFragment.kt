@@ -49,22 +49,25 @@ class PhotosFragment : Fragment() {
                 true
             }
             R.id.menu_view_type -> {
-                context?.let {
-                    val photoViewType = PreferencesHelper(it).getPhotoViewType()
-                    layoutManager.spanCount = PhotoViewType.switchViewTypeValue(photoViewType)
-                    item.icon = ContextCompat.getDrawable(it, PhotoViewType.setMenuImageResId(photoViewType))
-                    PreferencesHelper(it).setPhotoViewType(PhotoViewType.switchViewTypeValue(photoViewType))
-                    listAdapter.notifyItemRangeChanged(0, listAdapter.itemCount)
-                }
+                onClickViewTypeMenuItemAction(item)
                 true
             }
             else -> false
         }
 
-
+    private fun onClickViewTypeMenuItemAction(item: MenuItem) {
+        context?.let {
+            val photoViewType = PreferencesHelper(it).getPhotoViewType()
+            layoutManager.spanCount = PhotoViewType.switchViewTypeValue(photoViewType)
+            item.icon = ContextCompat.getDrawable(it, PhotoViewType.setMenuImageResId(photoViewType))
+            PreferencesHelper(it).setPhotoViewType(PhotoViewType.switchViewTypeValue(photoViewType))
+            listAdapter.notifyItemRangeChanged(0, listAdapter.itemCount)
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_photos_fragment, menu)
+        // initialize view type menu
         context?.let {
             val photoViewType = PreferencesHelper(it).getPhotoViewType()
             val viewTypeMenu = menu.findItem(R.id.menu_view_type)
@@ -94,7 +97,10 @@ class PhotosFragment : Fragment() {
         val viewModel = viewDataBinding.viewmodel
         if (viewModel != null) {
             context?.let {
-                layoutManager = StaggeredGridLayoutManager(PreferencesHelper(it).getPhotoViewType(), LinearLayoutManager.VERTICAL)
+                layoutManager = StaggeredGridLayoutManager(
+                    PreferencesHelper(it).getPhotoViewType(),
+                    LinearLayoutManager.VERTICAL
+                )
                 viewDataBinding.photosRecyclerView.layoutManager = layoutManager
                 listAdapter = PhotosAdapter(viewModel, it)
                 viewDataBinding.photosRecyclerView.adapter = listAdapter
@@ -111,10 +117,5 @@ class PhotosFragment : Fragment() {
         } else {
             Timber.w("ViewModel not initialized when attempting to set up adapter.")
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = true
     }
 }
