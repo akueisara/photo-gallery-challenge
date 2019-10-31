@@ -7,8 +7,6 @@
 
         <import type="android.view.View" />
 
-        <import type="com.example.photogallerychallenge.util.Converter"/>
-
         <variable
             name="viewmodel"
             type="com.example.photogallerychallenge.ui.photos.PhotosViewModel" />
@@ -20,29 +18,47 @@
         android:layout_height="match_parent"
         tools:context=".ui.photos.PhotosFragment">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="@{viewmodel.networkError != null &amp;&amp; viewmodel.photos.size() == 0 ? View.VISIBLE : View.GONE}">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/no_photo"
+                android:textSize="36sp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:drawableStart="@drawable/ic_reload"
+                android:drawablePadding="8dp"
+                android:onClick="@{() -> viewmodel.reloadPhotos()}"
+                android:scaleType="fitCenter"
+                android:text="@string/reload" />
+
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/photos_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/white"
             android:visibility="@{viewmodel.photos.size() > 0  ? View.VISIBLE : View.GONE}"
             app:items="@{viewmodel.photos}"
             tools:listitem="@layout/list_photo_item" />
-
-
-        <TextView
-            android:id="@+id/error_textView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:visibility="@{viewmodel.networkErrors != null &amp;&amp; viewmodel.photos.size() == 0 ? View.VISIBLE : View.GONE}"
-            android:text="@{Converter.getErrorMessage(viewmodel.networkErrors)}"/>
 
         <ProgressBar
             android:id="@+id/loading_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="@{viewmodel.dataLoading ? View.VISIBLE : View.GONE}" />
+            android:visibility="@{viewmodel.dataLoading &amp;&amp; viewmodel.photos.size() == 0 ? View.VISIBLE : View.GONE}" />
 
     </FrameLayout>
 

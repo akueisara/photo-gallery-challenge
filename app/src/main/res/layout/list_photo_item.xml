@@ -7,11 +7,9 @@
 
         <import type="android.view.View" />
 
-        <import type="com.example.photogallerychallenge.util.Converter" />
-
         <variable
             name="photo"
-            type="com.example.photogallerychallenge.data.local.database.DatabasePhoto" />
+            type="com.example.photogallerychallenge.data.model.DatabasePhoto" />
 
         <variable
             name="viewmodel"

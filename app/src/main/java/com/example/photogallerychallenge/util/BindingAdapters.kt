@@ -10,14 +10,16 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.photogallerychallenge.ui.photos.PhotosAdapter
 import android.graphics.Color
+import android.widget.TextView
 import androidx.core.content.ContextCompat
-import com.example.photogallerychallenge.data.local.database.DatabasePhoto
+import com.example.photogallerychallenge.data.model.DatabasePhoto
 import timber.log.Timber
 import com.example.photogallerychallenge.R
 
 @BindingAdapter("app:items")
 fun setItems(listView: RecyclerView, items: PagedList<DatabasePhoto>?) {
     items?.let {
+        Timber.d("items size: ${it.size}")
         (listView.adapter as PhotosAdapter).submitList(items)
     }
 }
@@ -52,4 +54,9 @@ fun setHexColor(view: View, hex: String?) {
         Timber.e(e)
         view.setBackgroundColor(ContextCompat.getColor(view.context, android.R.color.black))
     }
+}
+
+@BindingAdapter("infoText")
+fun setInfoText(textView: TextView, text: String?) {
+    textView.text = text ?: "None"
 }

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.photogallerychallenge.R
-import com.example.photogallerychallenge.data.local.database.DatabasePhoto
+import com.example.photogallerychallenge.data.model.DatabasePhoto
 import com.example.photogallerychallenge.data.local.prefs.PreferencesHelper
 import com.example.photogallerychallenge.databinding.GridPhotoItemBinding
 import com.example.photogallerychallenge.databinding.ListPhotoItemBinding
@@ -83,10 +83,10 @@ class PhotosAdapter(private val viewModel: PhotosViewModel, private val context:
             binding.photo = item
             binding.executePendingBindings()
 
-            loadAndAdjustImage(binding.photoImageView, item)
+            loadAndAdjustImageSize(binding.photoImageView, item)
         }
 
-        private fun loadAndAdjustImage(imageView: ImageView, photo: DatabasePhoto) {
+        private fun loadAndAdjustImageSize(imageView: ImageView, photo: DatabasePhoto) {
             val layoutParams = imageView.layoutParams
             layoutParams.height = (photo.height.toFloat() / photo.width.toFloat() * getScreenWidth(imageView.context) / PhotoViewType.GRID.value).toInt()
             layoutParams.width =  getScreenWidth(imageView.context) / PhotoViewType.GRID.value

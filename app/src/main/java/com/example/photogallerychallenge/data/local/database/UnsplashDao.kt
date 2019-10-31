@@ -1,13 +1,14 @@
 package com.example.photogallerychallenge.data.local.database
 
-import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import androidx.room.*
+import com.example.photogallerychallenge.data.model.DatabasePhoto
+import com.example.photogallerychallenge.data.model.DatabaseUser
 
 @Dao
 interface UnsplashDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPhotos(vararg photos: DatabasePhoto)
 
     @Query("SELECT * FROM photos")

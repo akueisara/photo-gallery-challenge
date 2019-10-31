@@ -1,10 +1,11 @@
 package com.example.photogallerychallenge.data.local.database
 
-import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
-import com.example.photogallerychallenge.data.NetworkPhotosContainer
-import com.example.photogallerychallenge.data.asDatabaseModel
-import com.example.photogallerychallenge.data.asDomainModel
+import com.example.photogallerychallenge.data.model.NetworkPhotosContainer
+import com.example.photogallerychallenge.data.model.asDatabaseModel
+import com.example.photogallerychallenge.data.model.asDomainModel
+import com.example.photogallerychallenge.data.model.DatabasePhoto
+import com.example.photogallerychallenge.data.model.DatabaseUser
 import timber.log.Timber
 import java.util.concurrent.Executor
 
@@ -27,18 +28,13 @@ class UnsplashLocalCache(private val unsplashDao: UnsplashDao, private val ioExe
 
     fun getPhoto(photoId: String): DatabasePhoto? {
         Timber.d("get photo $photoId from DB")
-            return unsplashDao.getPhoto(photoId)
+        return unsplashDao.getPhoto(photoId)
     }
 
-    fun updatePhoto(photo: DatabasePhoto, insertFinished: () -> Unit) {
+    fun updatePhoto(photo: DatabasePhoto) {
         ioExecutor.execute {
             val updateRow = unsplashDao.updatePhoto(photo)
             Timber.d("Update photo $photo row $updateRow")
-            insertFinished()
         }
-    }
-
-    fun getUser(userId: String): DatabaseUser? {
-        return unsplashDao.getUserById(userId)
     }
 }

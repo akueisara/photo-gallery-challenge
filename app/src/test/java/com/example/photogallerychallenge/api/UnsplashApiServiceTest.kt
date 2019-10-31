@@ -3,7 +3,7 @@ package com.example.photogallerychallenge.api
 import com.example.photogallerychallenge.BuildConfig
 import com.example.photogallerychallenge.data.model.*
 import com.example.photogallerychallenge.data.network.UnsplashAPIError
-import com.example.photogallerychallenge.data.NetworkPhotosContainer
+import com.example.photogallerychallenge.data.model.NetworkPhotosContainer
 import com.example.photogallerychallenge.data.network.UnsplashApi
 import com.example.photogallerychallenge.data.network.UnsplashApiService
 import kotlinx.coroutines.runBlocking

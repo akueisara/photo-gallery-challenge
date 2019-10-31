@@ -1,9 +1,5 @@
 package com.example.photogallerychallenge.data.model
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-
-@Parcelize
 data class Photo(
     val id: String,
     val created_at: String,
@@ -23,4 +19,4 @@ data class Photo(
     val location: Location?,
     val views: Long?,
     val downloads: Long?
-): Parcelable
+)

@@ -8,6 +8,10 @@
         <import type="android.view.View" />
 
         <variable
+            name="photoId"
+            type="String" />
+
+        <variable
             name="viewmodel"
             type="com.example.photogallerychallenge.ui.photodetail.PhotoDetailViewModel" />
     </data>
@@ -19,14 +23,13 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.photodetail.PhotoDetailFragment">
-
+            tools:context=".ui.photodetail.PhotoDetailFragment"
+            android:visibility="@{viewmodel.dataLoading ? View.INVISIBLE : View.VISIBLE}">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/photo_info_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="@{viewmodel.dataLoading ? View.INVISIBLE : View.VISIBLE}">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:id="@+id/user_layout"
@@ -66,7 +69,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:fontFamily="@font/roboto"
-                            android:text="@{viewmodel.user.username}"
+                            android:text="@{viewmodel.photo.user_username}"
                             android:textColor="#111111"
                             android:textSize="18sp"
                             tools:text="\@akueisara" />
@@ -76,12 +79,15 @@
                 </LinearLayout>
 
                 <RelativeLayout
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:id="@+id/photo_image_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_constraintTop_toBottomOf="@+id/user_layout">
 
                     <ImageView
+                        android:id="@+id/photo_image_view"
                         android:layout_width="match_parent"
                         android:layout_height="400dp"
                         android:scaleType="centerCrop"
@@ -89,13 +95,12 @@
                         app:imageUrl="@{viewmodel.photo.urls.regular}"
                         tools:src="@tools:sample/avatars" />
 
-                    <!--                    <Button-->
-                    <!--                        android:layout_width="wrap_content"-->
-                    <!--                        android:layout_height="wrap_content"-->
-                    <!--                        android:layout_alignParentEnd="true"-->
-                    <!--                        android:layout_alignParentBottom="true"-->
-                    <!--                        android:layout_margin="16dp"-->
-                    <!--                        android:text="Download" />-->
+                    <TextView
+                        android:layout_marginTop="16dp"
+                        android:layout_below="@+id/photo_image_view"
+                        style="@style/PhotoInfoDetail.Body2"
+                        android:visibility="@{viewmodel.photo.description != null ? View.VISIBLE : View.GONE}"
+                        android:text="@{viewmodel.photo.description}"/>
 
                 </RelativeLayout>
 
@@ -107,233 +112,245 @@
                     android:padding="16dp"
                     app:layout_constraintTop_toBottomOf="@+id/photo_image_layout">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                    <TextView
+                        style="@style/PhotoInfoDetail.Title"
+                        android:text="@string/photo_info" />
 
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/roboto_medium"
-                            android:text="Photo Info"
-                            android:textSize="21sp" />
-
-                        <!--                        <Button-->
-                        <!--                            android:layout_width="wrap_content"-->
-                        <!--                            android:layout_height="wrap_content"-->
-                        <!--                            android:layout_marginStart="16dp"-->
-                        <!--                            android:text="Share" />-->
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:orientation="horizontal">
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
 
                         <LinearLayout
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="@{viewmodel.photo.views != null ? View.VISIBLE : View.INVISIBLE}">
 
-                            <TextView
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Views" />
+                                android:layout_marginTop="24dp"
+                                android:orientation="horizontal">
 
-                            <TextView
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/views" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="@{viewmodel.photo.views.toString()}"
+                                        tools:text="2,279,193" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/downloads" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="@{viewmodel.photo.downloads.toString()}"
+                                        tools:text="5,395" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="24dp"
+                                android:layout_marginBottom="24dp"
+                                android:background="@color/colorPrimaryDark" />
+
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewmodel.photo.views.toString()}"
-                                tools:text="2,279,193" />
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="16dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/camera_make" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:infoText="@{viewmodel.photo.exif.make}"
+                                        tools:text="Canon" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="16dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/camera_model" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:infoText="@{viewmodel.photo.exif.model}"
+                                        tools:text="Canon EOS 5D Mark III" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/focal_length" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:infoText="@{viewmodel.photo.exif.focalLength}"
+                                        tools:text="50.0\mm" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="24dp"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="16dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/aperture" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:infoText="@{viewmodel.photo.exif.aperture}"
+                                        tools:text="ƒ/3.2" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginEnd="16dp"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/shutter_speed" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:infoText="@{viewmodel.photo.exif.exposureTime}"
+                                        tools:text="1/160s" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/iso" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:infoText="@{viewmodel.photo.exif.iso.toString()}"
+                                        tools:text="1250" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="24dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    style="@style/PhotoInfoDetail.Body1"
+                                    android:text="@string/dimension_title" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@{String.format(@string/dimensions_des, viewmodel.photo.width, viewmodel.photo.height)}"
+                                    tools:text="2400 × 3600" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="0dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="16dp"
+                            android:visibility="@{viewmodel.error != null &amp;&amp; viewmodel.photo.views == null ? View.VISIBLE : View.GONE}">
 
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Downloads" />
+                                android:text="@string/load_photo_error" />
 
-                            <TextView
-                                android:layout_width="match_parent"
+                            <Button
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewmodel.photo.downloads.toString()}"
-                                tools:text="5,395" />
+                                android:layout_marginTop="24dp"
+                                android:drawableStart="@drawable/ic_refresh"
+                                android:drawablePadding="8dp"
+                                android:onClick="@{() -> viewmodel.getPhoto(photoId)}"
+                                android:text="@string/try_again" />
 
                         </LinearLayout>
 
-                    </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="24dp"
-                        android:layout_marginBottom="24dp"
-                        android:background="@color/colorPrimaryDark" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="16dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Camera Make" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@{viewmodel.photo.exif.make}"
-                                tools:text="Canon" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="16dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Camera Model" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@{viewmodel.photo.exif.model}"
-                                tools:text="Canon EOS 5D Mark III" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Focal Length" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@{viewmodel.photo.exif.focalLength}"
-                                tools:text="50.0\mm" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="16dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Aperture" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@{viewmodel.photo.exif.aperture}"
-                                tools:text="ƒ/3.2" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="16dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Shutter Speed" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@{viewmodel.photo.exif.exposureTime}"
-                                tools:text="1/160s" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="ISO" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@{String.valueOf(viewmodel.photo.exif.iso)}"
-                                tools:text="1250" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="24dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:text="Dimensions" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:text="@{String.format(@string/dimensions, viewmodel.photo.width, viewmodel.photo.height)}"
-                            tools:text="2400 × 3600" />
-
-                    </LinearLayout>
+                    </RelativeLayout>
 
                 </LinearLayout>
 
@@ -346,6 +363,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:visibility="@{viewmodel.dataLoading ? View.VISIBLE : View.GONE}" />
+
 
     </RelativeLayout>
 

@@ -3,9 +3,9 @@ package com.example.photogallerychallenge.repository
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.example.photogallerychallenge.data.asDatabaseModel
-import com.example.photogallerychallenge.data.local.database.DatabasePhoto
-import com.example.photogallerychallenge.data.local.database.DatabaseUser
+import com.example.photogallerychallenge.data.model.asDatabaseModel
+import com.example.photogallerychallenge.data.model.DatabasePhoto
+import com.example.photogallerychallenge.data.model.DatabaseUser
 import com.example.photogallerychallenge.data.local.database.UnsplashLocalCache
 import com.example.photogallerychallenge.data.network.*
 import kotlinx.coroutines.Dispatchers
@@ -14,50 +14,48 @@ import timber.log.Timber
 
 class UnsplashRepository(private val service: UnsplashApiService, private val cache: UnsplashLocalCache) {
 
+    private lateinit var boundaryCallback: PhotoBoundaryCallback
+
     fun loadPhotos(): LoadPhotosResult {
         Timber.d("loadPhotos")
 
         val dataSourceFactory = cache.getPhotos()
 
-        val boundaryCallback =
-            PhotoBoundaryCallback(service, cache)
-        val networkErrors = boundaryCallback.networkErrors
+        boundaryCallback = PhotoBoundaryCallback(service, cache)
 
+        val dateLoading = boundaryCallback.dataLoading
+        val networkError = boundaryCallback.networkError
 
         val config = PagedList.Config.Builder()
             .setPageSize(DATABASE_PAGE_SIZE)
             .setEnablePlaceholders(false)
-            .build();
+            .build()
 
         val data = LivePagedListBuilder(dataSourceFactory, config)
             .setBoundaryCallback(boundaryCallback)
             .build()
 
-        return LoadPhotosResult(data, networkErrors)
+        return LoadPhotosResult(data, dateLoading, networkError)
     }
 
-    suspend fun loadPhoto(photoId: String, liveDataPhoto: MutableLiveData<DatabasePhoto>, error: MutableLiveData<UnsplashAPIError>) {
+    fun reloadPhotos() {
+        boundaryCallback.requestAndSaveData()
+    }
+
+    suspend fun loadPhoto(photoId: String, liveDataPhoto: MutableLiveData<DatabasePhoto>, dataLoading: MutableLiveData<Boolean>, error: MutableLiveData<UnsplashAPIError>) {
         withContext(Dispatchers.IO) {
-            liveDataPhoto.postValue(cache.getPhoto(photoId))
-            getPhoto(service, photoId, { networkPhotoContainer ->
+            dataLoading.postValue(true)
+            UnsplashApiHelper.getPhoto(service, photoId, { networkPhotoContainer ->
+                dataLoading.postValue(false)
                 val databasePhoto = networkPhotoContainer.asDatabaseModel()
-                databasePhoto.let {
-                    cache.updatePhoto(it) {
-                        liveDataPhoto.postValue(it)
-                    }
-                }
+                liveDataPhoto.postValue(databasePhoto)
+                cache.updatePhoto(databasePhoto)
             }, {
+                dataLoading.postValue(false)
+                liveDataPhoto.postValue(cache.getPhoto(photoId))
                 error.postValue(it)
             })
         }
-    }
-
-    suspend fun loadUser(userId: String, liveDataUser: MutableLiveData<DatabaseUser>) {
-        withContext(Dispatchers.IO) {
-            Timber.d("loadUser")
-            liveDataUser.postValue(cache.getUser(userId))
-        }
-
     }
 
     companion object {

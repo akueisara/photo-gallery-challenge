@@ -1,8 +1,29 @@
 <resources>
     <string name="app_name">Photo Gallery</string>
+    <string name="api_rate_limit_error">Api rate limit exceeded. Please try later</string>
 
+    <!--  Main Activity -->
+    <string name="hint_offline_mode">You are in offline mode</string>
+
+
+    <!-- Photos Fragment -->
+    <string name="no_photo">No Photos Result</string>
     <string name="show_list">Show List</string>
     <string name="show_grid">Show Grid</string>
+    <string name="reload">Reload</string>
 
-    <string name="dimensions">%d x %d</string>
+    <!-- Photo Detail Fragment -->
+    <string name="photo_info">Photo Info</string>
+    <string name="views">Views</string>
+    <string name="downloads">Downloads</string>
+    <string name="camera_make">Camera Make</string>
+    <string name="camera_model">Camera Model</string>
+    <string name="focal_length">Focal Length</string>
+    <string name="aperture">Aperture</string>
+    <string name="shutter_speed">Shutter Speed</string>
+    <string name="iso">ISO</string>
+    <string name="dimension_title">Dimensions</string>
+    <string name="dimensions_des">%d x %d</string>
+    <string name="load_photo_error">Unable to load the photo info</string>
+    <string name="try_again">Try Again</string>
 </resources>

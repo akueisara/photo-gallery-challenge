@@ -1,6 +1,5 @@
 package com.example.photogallerychallenge.data.network
 
-import androidx.lifecycle.LiveData
 import com.example.photogallerychallenge.BuildConfig
 import com.example.photogallerychallenge.data.model.Photo
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -16,11 +15,21 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
-import androidx.lifecycle.MutableLiveData
-import com.example.photogallerychallenge.data.NetworkPhotoContainer
-import com.example.photogallerychallenge.data.NetworkPhotosContainer
+import com.example.photogallerychallenge.data.model.NetworkPhotoContainer
+import com.example.photogallerychallenge.data.model.NetworkPhotosContainer
 import kotlinx.coroutines.Deferred
 
+
+interface UnsplashApiService {
+
+    @GET("photos")
+    fun getPhotos(@Query("client_id") clientId: String,
+                  @Query("page") page: Int?,
+                  @Query("per_page") pageSize: Int?): Call<List<Photo>>
+
+    @GET("photos/{id}")
+    fun getPhoto(@Path("id") id: String, @Query("client_id") clientId: String): Deferred<Photo>
+}
 
 object UnsplashApi {
     private const val BASE_URL = "https://api.unsplash.com/"
@@ -62,74 +71,5 @@ object UnsplashApi {
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
             .create(UnsplashApiService::class.java)
-    }
-}
-
-interface UnsplashApiService {
-
-    @GET("photos")
-    fun getPhotos(@Query("client_id") clientId: String,
-                  @Query("page") page: Int?,
-                  @Query("per_page") pageSize: Int?): Call<List<Photo>>
-
-    @GET("photos/{id}")
-    fun getPhoto(@Path("id") id: String, @Query("client_id") clientId: String): Deferred<Photo>
-}
-
-fun loadPhotos(
-    service: UnsplashApiService,
-    page: Int,
-    itemsPerPage: Int,
-    onSuccess: (networkPhotosContainer: NetworkPhotosContainer) -> Unit,
-    onError: (error: UnsplashAPIError) -> Unit) {
-
-    Timber.d("page: $page, itemsPerPage: $itemsPerPage")
-
-    service.getPhotos(BuildConfig.UNSPLASH_API_ACCESS_KEY, page, itemsPerPage).enqueue(
-            object : Callback<List<Photo>> {
-                override fun onFailure(call: Call<List<Photo>>?, t: Throwable) {
-                    Timber.d( "fail to get data")
-                    onError(UnsplashAPIError(t))
-                }
-
-                override fun onResponse(
-                    call: Call<List<Photo>>?,
-                    response: Response<List<Photo>>
-                ) {
-                    Timber.d("got a response $response")
-                    if (response.isSuccessful) {
-                        val repos = response.body() ?: emptyList()
-                        onSuccess(
-                            NetworkPhotosContainer(
-                                repos
-                            )
-                        )
-                    } else {
-                        onError(
-                            UnsplashAPIError(
-                                errorCode = response.code(),
-                                errorBody = response.errorBody()
-                            )
-                        )
-                    }
-                }
-            })
-}
-
-suspend fun getPhoto(service: UnsplashApiService, photoId: String,
-                     onSuccess: (networkPhotoContainer: NetworkPhotoContainer) -> Unit,
-                     onError: (error: UnsplashAPIError) -> Unit) {
-
-    Timber.d("get photo $photoId from Network")
-
-    try {
-        val photo = service.getPhoto(photoId, BuildConfig.UNSPLASH_API_ACCESS_KEY).await()
-        Timber.d("got a response $photo")
-        onSuccess(NetworkPhotoContainer(photo))
-    } catch (e: Exception) {
-        Timber.d( "fail to get data")
-        val error = UnsplashAPIError(e)
-        Timber.d( "error: ${error.code} ${error.message}")
-        onError(error)
     }
 }
