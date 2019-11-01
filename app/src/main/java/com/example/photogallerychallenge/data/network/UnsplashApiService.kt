@@ -63,8 +63,8 @@ object UnsplashApi {
         .add(KotlinJsonAdapterFactory())
         .build()
 
-    fun create(): UnsplashApiService = create(BASE_URL.toHttpUrlOrNull()!!)
-    fun create(httpUrl: HttpUrl): UnsplashApiService {
+    private fun create(): UnsplashApiService = create(BASE_URL.toHttpUrlOrNull()!!)
+    private fun create(httpUrl: HttpUrl): UnsplashApiService {
         return Retrofit.Builder()
             .baseUrl(httpUrl)
             .client(client)

@@ -39,8 +39,7 @@ class PhotoBoundaryCallback(private val service: UnsplashApiService, private val
             return
         }
         _dataLoading.value = true
-        UnsplashApiHelper.loadPhotos(service, lastRequestedPage,
-            NETWORK_PAGE_SIZE, { networkPhotoContainer ->
+        UnsplashApiHelper.loadPhotos(service, lastRequestedPage, NETWORK_PAGE_SIZE, { networkPhotoContainer ->
                 cache.insert(networkPhotoContainer) {
                     lastRequestedPage++
                     _dataLoading.postValue(false)

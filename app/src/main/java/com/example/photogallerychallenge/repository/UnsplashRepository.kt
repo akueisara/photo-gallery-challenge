@@ -44,15 +44,23 @@ class UnsplashRepository(private val service: UnsplashApiService, private val ca
 
     suspend fun loadPhoto(photoId: String, liveDataPhoto: MutableLiveData<DatabasePhoto>, dataLoading: MutableLiveData<Boolean>, error: MutableLiveData<UnsplashAPIError>) {
         withContext(Dispatchers.IO) {
+
             dataLoading.postValue(true)
+
             UnsplashApiHelper.getPhoto(service, photoId, { networkPhotoContainer ->
+
                 dataLoading.postValue(false)
+
                 val databasePhoto = networkPhotoContainer.asDatabaseModel()
                 liveDataPhoto.postValue(databasePhoto)
+
                 cache.updatePhoto(databasePhoto)
             }, {
                 dataLoading.postValue(false)
+
+                // if a network error occurs, get the photo from DB instead
                 liveDataPhoto.postValue(cache.getPhoto(photoId))
+
                 error.postValue(it)
             })
         }

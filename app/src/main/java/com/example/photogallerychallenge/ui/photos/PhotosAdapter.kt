@@ -16,25 +16,6 @@ import com.example.photogallerychallenge.data.local.prefs.PreferencesHelper
 import com.example.photogallerychallenge.databinding.GridPhotoItemBinding
 import com.example.photogallerychallenge.databinding.ListPhotoItemBinding
 
-enum class PhotoViewType(val value: Int) {
-    LIST(1),
-    GRID(3);
-
-    companion object{
-        fun switchViewTypeValue(value: Int): Int {
-            return if(value == LIST.value) {
-                GRID.value
-            } else {
-                LIST.value
-            }
-        }
-
-        fun setMenuImageResId(value: Int): Int {
-            return if(value == LIST.value) R.drawable.ic_list else R.drawable.ic_grid
-        }
-    }
-}
-
 class PhotosAdapter(private val viewModel: PhotosViewModel, private val context: Context) : PagedListAdapter<DatabasePhoto, RecyclerView.ViewHolder>(PhotoDiffCallback()) {
 
     override fun getItemViewType(position: Int): Int {

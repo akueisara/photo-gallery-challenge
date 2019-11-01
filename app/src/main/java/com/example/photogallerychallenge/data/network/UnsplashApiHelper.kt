@@ -52,7 +52,6 @@ object UnsplashApiHelper {
 
         try {
             val photo = service.getPhoto(photoId, BuildConfig.UNSPLASH_API_ACCESS_KEY).await()
-            Timber.d("got a response $photo")
             onSuccess(NetworkPhotoContainer(photo))
         } catch (e: Exception) {
             Timber.d( "fail to get data")

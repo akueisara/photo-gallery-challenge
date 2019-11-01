@@ -105,7 +105,7 @@ class PhotosFragment : Fragment() {
                 viewDataBinding.photosRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                         super.onScrolled(recyclerView, dx, dy)
-                        if (!viewDataBinding.photosRecyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)) {
+                        if(recyclerViewReachTheEnd(viewDataBinding.photosRecyclerView)) {
                             viewModel.reloadPhotos()
                         }
                     }
@@ -114,5 +114,9 @@ class PhotosFragment : Fragment() {
         } else {
             Timber.w("ViewModel not initialized when attempting to set up adapter.")
         }
+    }
+
+    private fun recyclerViewReachTheEnd(recyclerView: RecyclerView) : Boolean {
+        return !recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN)
     }
 }
