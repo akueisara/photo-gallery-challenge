@@ -9,15 +9,16 @@ import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
-object UnsplashApiHelper {
-    fun loadPhotos(
-        service: UnsplashApiService,
+class UnsplashApiDataSource(private val service: UnsplashApiService): UnsplashRemoteDataSource {
+
+    override fun loadPhotos(
         page: Int,
         itemsPerPage: Int,
         onSuccess: (networkPhotosContainer: NetworkPhotosContainer) -> Unit,
         onError: (UnsplashAPIError) -> Unit) {
 
         Timber.d("page: $page, itemsPerPage: $itemsPerPage")
+
 
         service.getPhotos(BuildConfig.UNSPLASH_API_ACCESS_KEY, page, itemsPerPage).enqueue(
             object : Callback<List<Photo>> {
@@ -44,7 +45,7 @@ object UnsplashApiHelper {
             })
     }
 
-    suspend fun getPhoto(service: UnsplashApiService, photoId: String,
+    override suspend fun getPhoto(photoId: String,
                          onSuccess: (networkPhotoContainer: NetworkPhotoContainer) -> Unit,
                          onError: (error: UnsplashAPIError) -> Unit) {
 

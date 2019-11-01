@@ -6,6 +6,7 @@ import com.example.photogallerychallenge.data.network.UnsplashAPIError
 import com.example.photogallerychallenge.data.model.NetworkPhotosContainer
 import com.example.photogallerychallenge.data.network.UnsplashApi
 import com.example.photogallerychallenge.data.network.UnsplashApiService
+import com.example.photogallerychallenge.readContentFromFile
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -27,7 +28,6 @@ import timber.log.Timber
 
 
 class UnsplashApiServiceTest {
-    // TODO: might need to use Mockito
 
     val RES_BASE_PATH = "../app/src/test/res/"
 
@@ -56,7 +56,7 @@ class UnsplashApiServiceTest {
     fun unsplashApiService_response_401Unauthorized() {
         val response = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_UNAUTHORIZED)
-            .setBody(readContentFromFile("authorization_error_response.json"))
+            .setBody(readContentFromFile(RES_BASE_PATH + "authorization_error_response.json"))
 
         mockWebServer.enqueue(response)
 
@@ -71,7 +71,7 @@ class UnsplashApiServiceTest {
     fun unsplashApiService_response_503ServerUnavailable() {
         val response = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_UNAVAILABLE)
-            .setBody(readContentFromFile("server_unavailable_response.html"))
+            .setBody(readContentFromFile(RES_BASE_PATH + "server_unavailable_response.html"))
 
         mockWebServer.enqueue(response)
 
@@ -103,7 +103,7 @@ class UnsplashApiServiceTest {
     fun getPhotos_singlePhoto_OK() {
         val response = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
-            .setBody(readContentFromFile("get_photos_single_photo_response.json"))
+            .setBody(readContentFromFile(RES_BASE_PATH + "get_photos_single_photo_response.json"))
         mockWebServer.enqueue(response)
 
         getPhotos(page = 1, onSuccess = {
@@ -186,7 +186,7 @@ class UnsplashApiServiceTest {
     fun getPhotos_tenPhotos_OK() {
         val response = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
-            .setBody(readContentFromFile("get_photos_ten_photos_response.json"))
+            .setBody(readContentFromFile(RES_BASE_PATH + "get_photos_ten_photos_response.json"))
         mockWebServer.enqueue(response)
 
         getPhotos(page = 10, onSuccess = {
@@ -202,9 +202,7 @@ class UnsplashApiServiceTest {
                 override fun onFailure(call: Call<List<Photo>>?, t: Throwable) {
                     Timber.d( "fail to get data")
                     onError?.let { it(
-                        UnsplashAPIError(
-                            t
-                        )
+                        UnsplashAPIError(t)
                     ) }
                 }
 
@@ -230,18 +228,5 @@ class UnsplashApiServiceTest {
                     }
                 }
             })
-    }
-
-    @Throws(IOException::class)
-    private fun readContentFromFile(fileName: String): String {
-        val br = BufferedReader(InputStreamReader(FileInputStream(RES_BASE_PATH + fileName)))
-        val sb = StringBuilder()
-        var line = br.readLine()
-        while (line != null) {
-            sb.append(line)
-            line = br.readLine()
-        }
-
-        return sb.toString()
     }
 }

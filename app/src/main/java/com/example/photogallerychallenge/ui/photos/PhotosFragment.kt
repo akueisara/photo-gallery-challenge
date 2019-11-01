@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.photogallerychallenge.Injection
+import com.example.photogallerychallenge.PhotoGalleryApplication
 import com.example.photogallerychallenge.R
 import com.example.photogallerychallenge.util.EventObserver
 import com.example.photogallerychallenge.data.local.prefs.PreferencesHelper
@@ -20,10 +20,9 @@ import com.example.revoluttask.ViewModelFactory
 import timber.log.Timber
 import java.net.HttpURLConnection
 
-
 class PhotosFragment : Fragment() {
 
-    private val viewModel by viewModels<PhotosViewModel> { ViewModelFactory(Injection.provideUnsplashRepository(context!!)) }
+    private val viewModel by viewModels<PhotosViewModel> { ViewModelFactory((requireContext().applicationContext as PhotoGalleryApplication).unsplashRepository) }
 
     private lateinit var viewDataBinding: FragmentPhotosBinding
 
@@ -76,8 +75,8 @@ class PhotosFragment : Fragment() {
         initListAdapter()
         setupNavigation()
 
-        viewModel.networkError.observe(this, Observer {
-            if(it.code != null && it.code == HttpURLConnection.HTTP_FORBIDDEN) {
+        viewModel.error.observe(this, Observer {
+            if(it?.code != null && it.code == HttpURLConnection.HTTP_FORBIDDEN) {
                 Toast.makeText(context, getString(R.string.api_rate_limit_error), Toast.LENGTH_SHORT).show()
             }
         })

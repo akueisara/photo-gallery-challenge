@@ -19,14 +19,14 @@ class MainActivity : AppCompatActivity(), NetworkConnectionReceiver.NetworkConne
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
-        networkConnectionReceiver = NetworkConnectionReceiver()
-        registerReceiver(networkConnectionReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
     override fun onResume() {
         super.onResume()
+        networkConnectionReceiver = NetworkConnectionReceiver()
+        registerReceiver(networkConnectionReceiver, IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
         NetworkConnectionReceiver.networkConnectionReceiverListener = this
+
     }
 
     override fun onPause() {

@@ -1,17 +1,13 @@
 package com.example.photogallerychallenge.data.local.database
 
 import androidx.paging.DataSource
-import com.example.photogallerychallenge.data.model.NetworkPhotosContainer
-import com.example.photogallerychallenge.data.model.asDatabaseModel
-import com.example.photogallerychallenge.data.model.asDomainModel
-import com.example.photogallerychallenge.data.model.DatabasePhoto
-import com.example.photogallerychallenge.data.model.DatabaseUser
+import com.example.photogallerychallenge.data.model.*
 import timber.log.Timber
 import java.util.concurrent.Executor
 
-class UnsplashLocalCache(private val unsplashDao: UnsplashDao, private val ioExecutor: Executor) {
+class UnsplashLocalCache(private val unsplashDao: UnsplashDao, private val ioExecutor: Executor): UnsplashLocalDataSource {
 
-    fun insert(networkPhotosContainer: NetworkPhotosContainer, insertFinished: () -> Unit) {
+    override fun insert(networkPhotosContainer: NetworkPhotosContainer, insertFinished: () -> Unit) {
         ioExecutor.execute {
             Timber.d("inserting ${networkPhotosContainer.asDatabaseModel().size} photos")
             unsplashDao.insertPhotos(*networkPhotosContainer.asDatabaseModel())
@@ -22,16 +18,16 @@ class UnsplashLocalCache(private val unsplashDao: UnsplashDao, private val ioExe
         }
     }
 
-    fun getPhotos(): DataSource.Factory<Int, DatabasePhoto> {
+    override fun getPhotos(): DataSource.Factory<Int, DatabasePhoto> {
         return unsplashDao.getPhotos()
     }
 
-    fun getPhoto(photoId: String): DatabasePhoto? {
+    override fun getPhoto(photoId: String): DatabasePhoto? {
         Timber.d("get photo $photoId from DB")
         return unsplashDao.getPhoto(photoId)
     }
 
-    fun updatePhoto(photo: DatabasePhoto) {
+    override fun updatePhoto(photo: DatabasePhoto) {
         ioExecutor.execute {
             val updateRow = unsplashDao.updatePhoto(photo)
             Timber.d("Update photo $photo row $updateRow")

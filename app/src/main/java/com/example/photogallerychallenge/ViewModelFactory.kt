@@ -2,12 +2,12 @@ package com.example.revoluttask
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.photogallerychallenge.repository.UnsplashRepository
+import com.example.photogallerychallenge.repository.Repository
 import com.example.photogallerychallenge.ui.photodetail.PhotoDetailViewModel
 import com.example.photogallerychallenge.ui.photos.PhotosViewModel
 
 @Suppress("UNCHECKED_CAST")
-class ViewModelFactory(private val unsplashRepository: UnsplashRepository) : ViewModelProvider.NewInstanceFactory() {
+class ViewModelFactory(private val unsplashRepository: Repository) : ViewModelProvider.NewInstanceFactory() {
 
     override fun <T : ViewModel> create(modelClass: Class<T>) =
         with(modelClass) {
