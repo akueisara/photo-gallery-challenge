@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="photoId"
+            type="String" />
+
+        <variable
+            name="viewmodel"
+            type="com.example.photogallerychallenge.ui.photodetail.PhotoDetailViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{viewmodel.error == null &amp;&amp; viewmodel.photo == null? View.INVISIBLE : View.VISIBLE}"
+            tools:context=".ui.photodetail.PhotoDetailFragment">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/photo_info_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/user_layout"
+                    style="@style/UserLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        style="@style/UserImageStyle"
+                        app:roundImageUrl="@{viewmodel.photo.user_profile_image_url}"
+                        tools:src="@android:drawable/star_big_off" />
+
+                    <LinearLayout
+                        style="@style/PhotoInfoDetailBox"
+                        android:layout_marginStart="@dimen/marginStart_layout_user">
+
+                        <TextView
+                            android:id="@+id/photo_user_name_text_view"
+                            style="@style/UserTextStyle.Name"
+                            android:text="@{viewmodel.photo.user_name}"
+                            tools:text="Kuei Jung Hu" />
+
+                        <TextView
+                            style="@style/UserTextStyle.UserName"
+                            android:layout_marginTop="@dimen/marginTop_user_name"
+                            android:text="@{viewmodel.photo.user_username}"
+                            tools:text="\@akueisara" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/photo_image_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_margin"
+                    android:layout_marginEnd="@dimen/activity_margin"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@+id/user_layout">
+
+                    <ImageView
+                        android:id="@+id/photo_image_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/height_photo"
+                        android:scaleType="centerCrop"
+                        app:backgroundHexColor="@{viewmodel.photo.color}"
+                        app:imageUrl="@{viewmodel.photo.urls.regular}"
+                        tools:src="@tools:sample/avatars"
+                        android:onClick="@{()->viewmodel.openPhotoViewer(viewmodel.photo.urls.regular)}" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginTop_layout_location"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:visibility="@{viewmodel.photo.location.city != null || viewmodel.photo.location.country != null ? View.VISIBLE : View.GONE}">
+
+                        <ImageView
+                            android:layout_width="@dimen/imageSize_location"
+                            android:layout_height="@dimen/imageSize_location"
+                            android:src="@drawable/ic_location" />
+
+                        <TextView
+                            style="@style/PhotoInfoDetail.Body2"
+                            android:layout_marginStart="@dimen/marginStart_text_location"
+                            app:infoLocation="@{viewmodel.photo.location}"
+                            tools:text="Taipei, Taiwan" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        style="@style/PhotoInfoDetail.Body2"
+                        android:layout_marginTop="@dimen/marginTop_photo_des"
+                        android:text="@{viewmodel.photo.description}"
+                        android:visibility="@{viewmodel.photo.description != null ? View.VISIBLE : View.GONE}"
+                        tools:text="An engineer who likes capybaras" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/info_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/activity_padding"
+                    app:layout_constraintTop_toBottomOf="@+id/photo_image_layout">
+
+                    <TextView
+                        style="@style/PhotoInfoDetail.Title"
+                        android:text="@string/photo_info" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="@{viewmodel.photo.views != null ? View.VISIBLE : View.INVISIBLE}">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/margin_info_detail"
+                                android:orientation="horizontal">
+
+                                <LinearLayout style="@style/PhotoInfoDetailBox">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/views" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:infoNumber="@{viewmodel.photo.views}"
+                                        tools:text="2,279,193" />
+
+                                </LinearLayout>
+
+                                <LinearLayout style="@style/PhotoInfoDetailBox">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/downloads" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:infoNumber="@{viewmodel.photo.downloads}"
+                                        tools:text="5,395" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/height_view_line"
+                                android:layout_marginTop="@dimen/margin_info_detail"
+                                android:layout_marginBottom="@dimen/margin_info_detail"
+                                android:background="@color/colorPrimaryDark" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    style="@style/PhotoInfoDetailBox"
+                                    android:layout_marginEnd="@dimen/marginEnd_box_photo_detail">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/camera_make" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:infoText="@{viewmodel.photo.exif.make}"
+                                        tools:text="Canon" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    style="@style/PhotoInfoDetailBox"
+                                    android:layout_marginEnd="@dimen/marginEnd_box_photo_detail">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/camera_model" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:infoText="@{viewmodel.photo.exif.model}"
+                                        tools:text="Canon EOS 5D Mark III" />
+
+                                </LinearLayout>
+
+                                <LinearLayout style="@style/PhotoInfoDetailBox">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/focal_length" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:infoFocalLength="@{viewmodel.photo.exif.focalLength}"
+                                        tools:text="50.0\mm" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/margin_info_detail"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    style="@style/PhotoInfoDetailBox"
+                                    android:layout_marginEnd="@dimen/marginEnd_box_photo_detail">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/aperture" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:infoAperture="@{viewmodel.photo.exif.aperture}"
+                                        tools:text="ƒ/3.2" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    style="@style/PhotoInfoDetailBox"
+                                    android:layout_marginEnd="@dimen/marginEnd_box_photo_detail">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/shutter_speed" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:infoSpeed="@{viewmodel.photo.exif.exposureTime}"
+                                        tools:text="1/160s" />
+
+                                </LinearLayout>
+
+                                <LinearLayout style="@style/PhotoInfoDetailBox">
+
+                                    <TextView
+                                        style="@style/PhotoInfoDetail.Body1"
+                                        android:text="@string/iso" />
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        app:infoText="@{viewmodel.photo.exif.iso.toString()}"
+                                        tools:text="1250" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/margin_info_detail"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    style="@style/PhotoInfoDetail.Body1"
+                                    android:text="@string/dimension_title" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@{String.format(@string/dimensions_des, viewmodel.photo.width, viewmodel.photo.height)}"
+                                    tools:text="2400 × 3600" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="@dimen/activity_padding"
+                            android:visibility="@{viewmodel.error != null &amp;&amp; viewmodel.photo.views == null ? View.VISIBLE : View.GONE}">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:text="@string/load_photo_error"
+                                android:textSize="@dimen/textSize_unable_load_photo" />
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/margin_info_detail"
+                                android:drawableStart="@drawable/ic_refresh"
+                                android:drawablePadding="@dimen/drawablePadding_button"
+                                android:onClick="@{() -> viewmodel.getPhoto(photoId)}"
+                                android:text="@string/try_again" />
+
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="@{viewmodel.error == null &amp;&amp; viewmodel.photo == null ? View.VISIBLE : View.GONE}" />
+
+    </RelativeLayout>
+
+</layout>

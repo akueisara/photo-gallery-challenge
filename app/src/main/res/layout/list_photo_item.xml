@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="photo"
+            type="com.example.photogallerychallenge.data.model.DatabasePhoto" />
+
+        <variable
+            name="viewmodel"
+            type="com.example.photogallerychallenge.ui.photos.PhotosViewModel" />
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_list_card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                style="@style/UserLayout">
+
+                <ImageView
+                    style="@style/UserImageStyle"
+                    app:roundImageUrl="@{photo.user_profile_image_url}"
+                    tools:src="@android:drawable/star_big_off" />
+
+
+                <TextView
+                    style="@style/UserTextStyle.Name"
+                    android:layout_marginStart="@dimen/marginStart_text_user_name"
+                    android:text="@{photo.user_name}"
+                    tools:text="Kuei Jung Hu" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_text_user_name"
+                android:layout_marginEnd="@dimen/margin_text_user_name"
+                android:layout_marginBottom="@dimen/margin_text_user_name"
+                android:fontFamily="@font/roboto"
+                android:text="@{photo.description}"
+                android:textColor="@color/grey_600"
+                android:visibility="@{photo.description.length() == 0 ? View.GONE : View.VISIBLE}"
+                tools:text="Kuei Jung Hu" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_photo"
+                android:onClick="@{() -> viewmodel.openPhoto(photo.id)}"
+                android:scaleType="centerCrop"
+                app:backgroundHexColor="@{photo.color}"
+                app:imageUrl="@{photo.urls.regular}"
+                tools:src="@tools:sample/avatars" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

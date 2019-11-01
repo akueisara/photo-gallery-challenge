@@ -6,6 +6,68 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+
+        <!--  Default Font -->
+        <item name="android:fontFamily">@font/roboto</item>
     </style>
 
+    <style name="ActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="PhotoInfoDetail">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="UserLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">@dimen/padding_layout_user</item>
+    </style>
+
+    <style name="UserImageStyle">
+        <item name="android:layout_width">@dimen/imageSize_user_photo</item>
+        <item name="android:layout_height">@dimen/imageSize_user_photo</item>
+    </style>
+
+    <style name="UserTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black_900</item>
+        <item name="android:textSize">@dimen/textSize_user_name</item>
+    </style>
+
+    <style name="UserTextStyle.Name">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="UserTextStyle.UserName">
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="PhotoInfoDetailBox">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+         <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="PhotoInfoDetail.Title">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/grey_900</item>
+        <item name="android:textSize">21sp</item>
+    </style>
+
+    <style name="PhotoInfoDetail.Body1">
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/grey_800</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="PhotoInfoDetail.Body2">
+        <item name="android:textColor">@color/grey_700</item>
+    </style>
 </resources>
