@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_margin">16dp</dimen>
+    <dimen name="activity_padding">16dp</dimen>
+
+    <!-- Activity -->
+    <dimen name="padding_text_offline">8dp</dimen>
+
+    <!-- Fragment Photos -->
+    <dimen name="textSize_no_photo">36sp</dimen>
+    <dimen name="marginTop_button_reload">16dp</dimen>
+
+    <!-- List Photo Item  -->
+    <dimen name="padding_list_card">16dp</dimen>
+    <dimen name="imageSize_user_photo">32dp</dimen>
+    <dimen name="padding_layout_user">16dp</dimen>
+    <dimen name="textSize_user_name">18sp</dimen>
+    <dimen name="marginStart_text_user_name">16dp</dimen>
+    <dimen name="margin_text_user_name">16dp</dimen>
+    <dimen name="height_photo">400dp</dimen>
+
+    <!-- Gird Photo Item  -->
+    <dimen name="padding_grid_card">8dp</dimen>
+
+    <!-- Fragment Photo Detail -->
+    <dimen name="marginTop_user_name">4dp</dimen>
+    <dimen name="marginStart_layout_user">16dp</dimen>
+    <dimen name="marginTop_layout_location">16dp</dimen>
+    <dimen name="imageSize_location">24dp</dimen>
+    <dimen name="marginStart_text_location">4dp</dimen>
+    <dimen name="marginTop_photo_des">16dp</dimen>
+    <dimen name="margin_info_detail">24dp</dimen>
+    <dimen name="height_view_line">1dp</dimen>
+    <dimen name="marginEnd_box_photo_detail">16dp</dimen>
+    <dimen name="textSize_unable_load_photo">24sp</dimen>
+
+
+    <dimen name="drawablePadding_button">8dp</dimen>
+</resources>

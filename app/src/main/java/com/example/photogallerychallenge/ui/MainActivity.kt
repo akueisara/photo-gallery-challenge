@@ -35,6 +35,6 @@ class MainActivity : AppCompatActivity(), NetworkConnectionReceiver.NetworkConne
     }
 
     override fun onNetworkConnectionChanged(isConnected: Boolean) {
-        dataBinding.errorTextView.isVisible = !isConnected
+        dataBinding.offlineTextView.isVisible = !isConnected
     }
 }

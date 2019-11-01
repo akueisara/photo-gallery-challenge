@@ -20,7 +20,7 @@ interface UnsplashDao {
     @Update
     fun updatePhoto(photo: DatabasePhoto)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertUser(user: DatabaseUser)
 
     @Query("SELECT * FROM users WHERE id LIKE :userId")

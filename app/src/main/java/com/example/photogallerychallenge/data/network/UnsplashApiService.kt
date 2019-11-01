@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit
 import com.example.photogallerychallenge.data.model.NetworkPhotoContainer
 import com.example.photogallerychallenge.data.model.NetworkPhotosContainer
 import kotlinx.coroutines.Deferred
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 
 interface UnsplashApiService {
@@ -62,7 +63,7 @@ object UnsplashApi {
         .add(KotlinJsonAdapterFactory())
         .build()
 
-    fun create(): UnsplashApiService = create(HttpUrl.parse(BASE_URL)!!)
+    fun create(): UnsplashApiService = create(BASE_URL.toHttpUrlOrNull()!!)
     fun create(httpUrl: HttpUrl): UnsplashApiService {
         return Retrofit.Builder()
             .baseUrl(httpUrl)

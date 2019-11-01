@@ -59,7 +59,7 @@ class UnsplashRepository(private val service: UnsplashApiService, private val ca
     }
 
     companion object {
-        private const val DATABASE_PAGE_SIZE = 30
+        private const val DATABASE_PAGE_SIZE = 100
     }
 }
 

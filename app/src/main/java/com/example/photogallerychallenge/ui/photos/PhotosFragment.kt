@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -53,9 +52,9 @@ class PhotosFragment : Fragment() {
 
     private fun onClickViewTypeMenuItemAction(item: MenuItem) {
         context?.let {
-            layoutManager.spanCount = PhotoViewType.switchViewTypeValue(photoViewType)
-            item.icon = ContextCompat.getDrawable(it, PhotoViewType.setMenuImageResId(photoViewType))
             photoViewType = PhotoViewType.switchViewTypeValue(photoViewType)
+            layoutManager.spanCount = photoViewType
+            item.icon = ContextCompat.getDrawable(it, PhotoViewType.setMenuImageResId(photoViewType))
             PreferencesHelper(it).setPhotoViewType(photoViewType)
             listAdapter.notifyItemRangeChanged(0, listAdapter.itemCount)
         }
@@ -67,7 +66,7 @@ class PhotosFragment : Fragment() {
         context?.let {
             photoViewType = PreferencesHelper(it).getPhotoViewType()
             val viewTypeMenu = menu.findItem(R.id.menu_view_type)
-            viewTypeMenu.icon = ContextCompat.getDrawable(it, PhotoViewType.setMenuImageResId(photoViewType, true))
+            viewTypeMenu.icon = ContextCompat.getDrawable(it, PhotoViewType.setMenuImageResId(photoViewType))
         }
     }
 

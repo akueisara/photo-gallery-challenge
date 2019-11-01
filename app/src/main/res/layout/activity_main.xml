@@ -8,12 +8,12 @@
         tools:context=".ui.MainActivity">
 
         <TextView
-            android:id="@+id/error_textView"
+            android:id="@+id/offlineTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorWarning"
             android:gravity="center"
-            android:padding="8dp"
+            android:padding="@dimen/padding_text_offline"
             android:textColor="@android:color/white"
             android:text="@string/hint_offline_mode"/>
 
@@ -23,7 +23,7 @@
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/error_textView"
+            android:layout_below="@+id/offlineTextView"
             app:defaultNavHost="true"
             app:navGraph="@navigation/nav_graph" />
 

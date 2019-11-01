@@ -20,7 +20,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp">
+        android:layout_margin="@dimen/padding_list_card">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,27 +28,18 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp">
+                style="@style/UserLayout">
 
                 <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
+                    style="@style/UserImageStyle"
                     app:roundImageUrl="@{photo.user_profile_image_url}"
                     tools:src="@android:drawable/star_big_off" />
 
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:fontFamily="@font/roboto_medium"
+                    style="@style/UserTextStyle.Name"
+                    android:layout_marginStart="@dimen/marginStart_text_user_name"
                     android:text="@{photo.user_name}"
-                    android:textColor="#111111"
-                    android:textSize="18sp"
                     tools:text="Kuei Jung Hu" />
 
             </LinearLayout>
@@ -57,18 +48,18 @@
                 android:id="@+id/user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginStart="@dimen/margin_text_user_name"
+                android:layout_marginEnd="@dimen/margin_text_user_name"
+                android:layout_marginBottom="@dimen/margin_text_user_name"
                 android:fontFamily="@font/roboto"
                 android:text="@{photo.description}"
-                android:textColor="#767676"
+                android:textColor="@color/grey_600"
                 android:visibility="@{photo.description.length() == 0 ? View.GONE : View.VISIBLE}"
                 tools:text="Kuei Jung Hu" />
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="@dimen/height_photo"
                 android:onClick="@{() -> viewmodel.openPhoto(photo.id)}"
                 android:scaleType="centerCrop"
                 app:backgroundHexColor="@{photo.color}"

@@ -96,6 +96,10 @@ dependencies {
     // Glide for images
     implementation "com.github.bumptech.glide:glide:$glideVersion"
 
+    // Image Viewer
+    implementation 'com.github.piasy:BigImageViewer:1.6.1'
+    implementation 'com.github.piasy:GlideImageLoader:1.6.1'
+
     // Dependencies for local unit tests
     testImplementation "junit:junit:$junitVersion"
     testImplementation "org.hamcrest:hamcrest-all:$hamcrestVersion"

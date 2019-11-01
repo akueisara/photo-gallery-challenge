@@ -23,8 +23,8 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context=".ui.photodetail.PhotoDetailFragment"
-            android:visibility="@{viewmodel.dataLoading ? View.INVISIBLE : View.VISIBLE}">
+            android:visibility="@{viewmodel.dataLoading ? View.INVISIBLE : View.VISIBLE}"
+            tools:context=".ui.photodetail.PhotoDetailFragment">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/photo_info_layout"
@@ -33,83 +33,90 @@
 
                 <LinearLayout
                     android:id="@+id/user_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="16dp"
+                    style="@style/UserLayout"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        style="@style/UserImageStyle"
                         app:roundImageUrl="@{viewmodel.photo.user_profile_image_url}"
                         tools:src="@android:drawable/star_big_off" />
 
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        style="@style/PhotoInfoDetailBox"
+                        android:layout_marginStart="@dimen/marginStart_layout_user">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/roboto_medium"
+                            style="@style/UserTextStyle.Name"
                             android:text="@{viewmodel.photo.user_name}"
-                            android:textColor="#111111"
-                            android:textSize="18sp"
                             tools:text="Kuei Jung Hu" />
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="@font/roboto"
+                            style="@style/UserTextStyle.UserName"
+                            android:layout_marginTop="@dimen/marginTop_user_name"
                             android:text="@{viewmodel.photo.user_username}"
-                            android:textColor="#111111"
-                            android:textSize="18sp"
                             tools:text="\@akueisara" />
 
                     </LinearLayout>
 
                 </LinearLayout>
 
-                <RelativeLayout
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
+                <LinearLayout
                     android:id="@+id/photo_image_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/activity_margin"
+                    android:layout_marginEnd="@dimen/activity_margin"
+                    android:orientation="vertical"
                     app:layout_constraintTop_toBottomOf="@+id/user_layout">
 
                     <ImageView
                         android:id="@+id/photo_image_view"
                         android:layout_width="match_parent"
-                        android:layout_height="400dp"
+                        android:layout_height="@dimen/height_photo"
                         android:scaleType="centerCrop"
                         app:backgroundHexColor="@{viewmodel.photo.color}"
                         app:imageUrl="@{viewmodel.photo.urls.regular}"
-                        tools:src="@tools:sample/avatars" />
+                        tools:src="@tools:sample/avatars"
+                        android:onClick="@{()->viewmodel.openPhotoViewer(viewmodel.photo.urls.regular)}" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/marginTop_layout_location"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:visibility="@{viewmodel.photo.location.city != null || viewmodel.photo.location.country != null ? View.VISIBLE : View.GONE}">
+
+                        <ImageView
+                            android:layout_width="@dimen/imageSize_location"
+                            android:layout_height="@dimen/imageSize_location"
+                            android:src="@drawable/ic_location" />
+
+                        <TextView
+                            style="@style/PhotoInfoDetail.Body2"
+                            android:layout_marginStart="@dimen/marginStart_text_location"
+                            app:infoLocation="@{viewmodel.photo.location}"
+                            tools:text="Taipei, Taiwan" />
+
+                    </LinearLayout>
 
                     <TextView
-                        android:layout_marginTop="16dp"
-                        android:layout_below="@+id/photo_image_view"
                         style="@style/PhotoInfoDetail.Body2"
+                        android:layout_marginTop="@dimen/marginTop_photo_des"
+                        android:text="@{viewmodel.photo.description}"
                         android:visibility="@{viewmodel.photo.description != null ? View.VISIBLE : View.GONE}"
-                        android:text="@{viewmodel.photo.description}"/>
+                        tools:text="An engineer who likes capybaras" />
 
-                </RelativeLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/info_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp"
+                    android:padding="@dimen/activity_padding"
                     app:layout_constraintTop_toBottomOf="@+id/photo_image_layout">
 
                     <TextView
@@ -129,14 +136,10 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="24dp"
+                                android:layout_marginTop="@dimen/margin_info_detail"
                                 android:orientation="horizontal">
 
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                <LinearLayout style="@style/PhotoInfoDetailBox">
 
                                     <TextView
                                         style="@style/PhotoInfoDetail.Body1"
@@ -145,16 +148,12 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="@{viewmodel.photo.views.toString()}"
+                                        app:infoNumber="@{viewmodel.photo.views}"
                                         tools:text="2,279,193" />
 
                                 </LinearLayout>
 
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                <LinearLayout style="@style/PhotoInfoDetailBox">
 
                                     <TextView
                                         style="@style/PhotoInfoDetail.Body1"
@@ -163,7 +162,7 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="@{viewmodel.photo.downloads.toString()}"
+                                        app:infoNumber="@{viewmodel.photo.downloads}"
                                         tools:text="5,395" />
 
                                 </LinearLayout>
@@ -172,9 +171,9 @@
 
                             <View
                                 android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_marginTop="24dp"
-                                android:layout_marginBottom="24dp"
+                                android:layout_height="@dimen/height_view_line"
+                                android:layout_marginTop="@dimen/margin_info_detail"
+                                android:layout_marginBottom="@dimen/margin_info_detail"
                                 android:background="@color/colorPrimaryDark" />
 
                             <LinearLayout
@@ -183,11 +182,8 @@
                                 android:orientation="horizontal">
 
                                 <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="16dp"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                    style="@style/PhotoInfoDetailBox"
+                                    android:layout_marginEnd="@dimen/marginEnd_box_photo_detail">
 
                                     <TextView
                                         style="@style/PhotoInfoDetail.Body1"
@@ -202,11 +198,8 @@
                                 </LinearLayout>
 
                                 <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="16dp"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                    style="@style/PhotoInfoDetailBox"
+                                    android:layout_marginEnd="@dimen/marginEnd_box_photo_detail">
 
                                     <TextView
                                         style="@style/PhotoInfoDetail.Body1"
@@ -220,11 +213,7 @@
 
                                 </LinearLayout>
 
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                <LinearLayout style="@style/PhotoInfoDetailBox">
 
                                     <TextView
                                         style="@style/PhotoInfoDetail.Body1"
@@ -243,15 +232,12 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="24dp"
+                                android:layout_marginTop="@dimen/margin_info_detail"
                                 android:orientation="horizontal">
 
                                 <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="16dp"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                    style="@style/PhotoInfoDetailBox"
+                                    android:layout_marginEnd="@dimen/marginEnd_box_photo_detail">
 
                                     <TextView
                                         style="@style/PhotoInfoDetail.Body1"
@@ -266,11 +252,8 @@
                                 </LinearLayout>
 
                                 <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginEnd="16dp"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                    style="@style/PhotoInfoDetailBox"
+                                    android:layout_marginEnd="@dimen/marginEnd_box_photo_detail">
 
                                     <TextView
                                         style="@style/PhotoInfoDetail.Body1"
@@ -284,11 +267,7 @@
 
                                 </LinearLayout>
 
-                                <LinearLayout
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:orientation="vertical">
+                                <LinearLayout style="@style/PhotoInfoDetailBox">
 
                                     <TextView
                                         style="@style/PhotoInfoDetail.Body1"
@@ -307,7 +286,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="24dp"
+                                android:layout_marginTop="@dimen/margin_info_detail"
                                 android:orientation="vertical">
 
                                 <TextView
@@ -330,20 +309,22 @@
                             android:layout_centerInParent="true"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp"
+                            android:padding="@dimen/activity_padding"
                             android:visibility="@{viewmodel.error != null &amp;&amp; viewmodel.photo.views == null ? View.VISIBLE : View.GONE}">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/load_photo_error" />
+                                android:textAlignment="center"
+                                android:text="@string/load_photo_error"
+                                android:textSize="@dimen/textSize_unable_load_photo" />
 
                             <Button
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="24dp"
+                                android:layout_marginTop="@dimen/margin_info_detail"
                                 android:drawableStart="@drawable/ic_refresh"
-                                android:drawablePadding="8dp"
+                                android:drawablePadding="@dimen/drawablePadding_button"
                                 android:onClick="@{() -> viewmodel.getPhoto(photoId)}"
                                 android:text="@string/try_again" />
 
@@ -363,7 +344,6 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:visibility="@{viewmodel.dataLoading ? View.VISIBLE : View.GONE}" />
-
 
     </RelativeLayout>
 

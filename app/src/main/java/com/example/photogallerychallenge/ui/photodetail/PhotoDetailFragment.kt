@@ -10,9 +10,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.example.photogallerychallenge.Injection
+import com.example.photogallerychallenge.R
 
 import com.example.photogallerychallenge.databinding.FragmentPhotoDetailBinding
+import com.example.photogallerychallenge.util.EventObserver
 import com.example.revoluttask.ViewModelFactory
+import java.net.HttpURLConnection
 
 class PhotoDetailFragment : Fragment() {
     private lateinit var viewDataBinding: FragmentPhotoDetailBinding
@@ -31,11 +34,29 @@ class PhotoDetailFragment : Fragment() {
         viewModel.start(args.photoId)
 
         viewModel.photoId.observe(this, Observer {
-            if(it.isNotEmpty()) {
-                viewModel.getPhoto(it)
+            viewModel.start(it)
+        })
+
+        viewModel.error.observe(this, Observer {
+            if(it.message.contains(HttpURLConnection.HTTP_FORBIDDEN.toString())) {
+                Toast.makeText(
+                    context,
+                    getString(R.string.api_rate_limit_error),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
 
+        viewModel.photoViewerImageViewUrl.observe(this, Observer {
+            openPhotoViewer(it)
+        })
+
         return viewDataBinding.root
+    }
+
+    private fun openPhotoViewer(imageUrl: String) {
+        context?.let {
+            PhotoViewerDialog(it, imageUrl).show()
+        }
     }
 }

@@ -29,8 +29,8 @@ enum class PhotoViewType(val value: Int) {
             }
         }
 
-        fun setMenuImageResId(value: Int, theOppositeResult: Boolean = false): Int {
-            return if(!theOppositeResult.xor(value != LIST.value)) R.drawable.ic_list else R.drawable.ic_grid
+        fun setMenuImageResId(value: Int): Int {
+            return if(value == LIST.value) R.drawable.ic_list else R.drawable.ic_grid
         }
     }
 }

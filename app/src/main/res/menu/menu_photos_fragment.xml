@@ -5,7 +5,7 @@
     <item
         android:id="@+id/menu_view_type"
         android:icon="@drawable/ic_grid"
-        android:title="Switch Layout"
+        android:title="@string/switch_layout"
         app:showAsAction="ifRoom" />
 
 </menu>
