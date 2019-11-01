@@ -1,4 +1,4 @@
-package com.example.photogallerychallenge
+package photogallerychallenge
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData

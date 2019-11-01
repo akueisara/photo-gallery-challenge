@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.photogallerychallenge.Injection
+import com.example.photogallerychallenge.PhotoGalleryApplication
 import com.example.photogallerychallenge.R
 import com.example.photogallerychallenge.util.EventObserver
 import com.example.photogallerychallenge.data.local.prefs.PreferencesHelper
@@ -22,7 +22,7 @@ import java.net.HttpURLConnection
 
 class PhotosFragment : Fragment() {
 
-    private val viewModel by viewModels<PhotosViewModel> { ViewModelFactory(Injection.provideUnsplashRepository(context!!)) }
+    private val viewModel by viewModels<PhotosViewModel> { ViewModelFactory((requireContext().applicationContext as PhotoGalleryApplication).unsplashRepository) }
 
     private lateinit var viewDataBinding: FragmentPhotosBinding
 

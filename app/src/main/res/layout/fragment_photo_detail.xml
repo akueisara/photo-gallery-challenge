@@ -48,6 +48,7 @@
                         android:layout_marginStart="@dimen/marginStart_layout_user">
 
                         <TextView
+                            android:id="@+id/photo_user_name_text_view"
                             style="@style/UserTextStyle.Name"
                             android:text="@{viewmodel.photo.user_name}"
                             tools:text="Kuei Jung Hu" />

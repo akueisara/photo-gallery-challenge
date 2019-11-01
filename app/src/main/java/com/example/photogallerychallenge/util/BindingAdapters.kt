@@ -96,17 +96,17 @@ fun setInfoLocation(textView: TextView, location: Location?) {
 
 @BindingAdapter("infoFocalLength")
 fun setInfoFocalLength(textView: TextView, length: String?) {
-    textView.text = textView.context.getString(R.string.focal_length_des, length) ?: textView.context.getString(R.string.none)
+    textView.text = if(length != null) textView.context.getString(R.string.focal_length_des, length) else textView.context.getString(R.string.none)
 }
 
 @BindingAdapter("infoAperture")
 fun setInfoAperture(textView: TextView, aperture: String?) {
-    textView.text = textView.context.getString(R.string.aperture_des, aperture) ?: textView.context.getString(R.string.none)
+    textView.text = if(aperture != null) textView.context.getString(R.string.aperture_des, aperture) else textView.context.getString(R.string.none)
 }
 
 @BindingAdapter("infoSpeed")
 fun setInfoSpeed(textView: TextView, speed: String?) {
-    textView.text = textView.context.getString(R.string.speed_des, speed) ?: textView.context.getString(R.string.none)
+    textView.text = if(speed != null) textView.context.getString(R.string.speed_des, speed) else textView.context.getString(R.string.none)
 }
 
 

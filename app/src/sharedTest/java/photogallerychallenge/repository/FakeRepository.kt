@@ -4,8 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import com.example.photogallerychallenge.asPagedList
 import com.example.photogallerychallenge.data.model.DatabasePhoto
-import com.example.photogallerychallenge.data.model.NetworkPhotosContainer
-import com.example.photogallerychallenge.data.model.asDatabaseModel
 import com.example.photogallerychallenge.data.network.UnsplashAPIError
 import kotlinx.coroutines.runBlocking
 import java.util.LinkedHashMap
@@ -52,7 +50,7 @@ class FakeRepository: Repository {
             photosServiceData[count] = photo
             count += 1
         }
-        runBlocking { reloadPhotos() }
+        reloadPhotos()
     }
 
 }

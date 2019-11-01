@@ -2,11 +2,10 @@ package com.example.photogallerychallenge.repository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.photogallerychallenge.data.local.database.FakeUnsplashLocalDataSource
-import com.example.photogallerychallenge.data.model.*
 import com.example.photogallerychallenge.data.network.FakeUnsplashRemoteDataSource
 import com.example.photogallerychallenge.getFakeDatabasePhoto
 import com.example.photogallerychallenge.getFakePhoto
-import com.example.photogallerychallenge.getOrAwaitValue
+import photogallerychallenge.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat

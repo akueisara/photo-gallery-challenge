@@ -1,19 +1,14 @@
 package com.example.photogallerychallenge.ui.photos
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.photogallerychallenge.Injection
 import com.example.photogallerychallenge.getFakeDatabasePhoto
-import com.example.photogallerychallenge.getOrAwaitValue
+import photogallerychallenge.getOrAwaitValue
 import com.example.photogallerychallenge.repository.FakeRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
 class PhotosViewModelTest {
 

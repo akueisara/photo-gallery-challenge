@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
-import com.example.photogallerychallenge.Injection
+import com.example.photogallerychallenge.PhotoGalleryApplication
 import com.example.photogallerychallenge.R
 
 import com.example.photogallerychallenge.databinding.FragmentPhotoDetailBinding
@@ -20,7 +20,7 @@ import java.net.HttpURLConnection
 class PhotoDetailFragment : Fragment() {
     private lateinit var viewDataBinding: FragmentPhotoDetailBinding
 
-    private val viewModel by viewModels<PhotoDetailViewModel> { ViewModelFactory(Injection.provideUnsplashRepository(context!!)) }
+    private val viewModel by viewModels<PhotoDetailViewModel> { ViewModelFactory((requireContext().applicationContext as PhotoGalleryApplication).unsplashRepository) }
 
     private val args: PhotoDetailFragmentArgs by navArgs()
 
@@ -43,7 +43,7 @@ class PhotoDetailFragment : Fragment() {
             }
         })
 
-        viewModel.photoViewerImageViewUrl.observe(this, Observer {
+        viewModel.photoViewerImageViewUrl.observe(this, EventObserver {
             openPhotoViewer(it)
         })
 
