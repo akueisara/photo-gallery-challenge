@@ -73,7 +73,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$coreVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayoutVersion"
     implementation "androidx.recyclerview:recyclerview:$recyclerViewVersion"
-    implementation 'com.android.support:multidex:1.0.3'
+    implementation "com.android.support:multidex:$multidexVersion"
 
     // Room and Lifecycle dependencies
     implementation "androidx.room:room-runtime:$roomVersion"
@@ -96,7 +96,7 @@ dependencies {
     // OkHttp
     implementation "com.squareup.okhttp3:okhttp:$okhttp3Version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3Version"
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "androidx.legacy:legacy-support-v4:$legacySupportVersion"
     testImplementation "com.squareup.okhttp3:mockwebserver:$okhttp3Version"
 
     // Moshi
