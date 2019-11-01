@@ -1,4 +1,4 @@
-package com.example.revoluttask
+package com.example.photogallerychallenge
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

@@ -16,7 +16,7 @@ import com.example.photogallerychallenge.R
 import com.example.photogallerychallenge.util.EventObserver
 import com.example.photogallerychallenge.data.local.prefs.PreferencesHelper
 import com.example.photogallerychallenge.databinding.FragmentPhotosBinding
-import com.example.revoluttask.ViewModelFactory
+import com.example.photogallerychallenge.ViewModelFactory
 import timber.log.Timber
 import java.net.HttpURLConnection
 

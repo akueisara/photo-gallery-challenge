@@ -14,7 +14,7 @@ import com.example.photogallerychallenge.R
 
 import com.example.photogallerychallenge.databinding.FragmentPhotoDetailBinding
 import com.example.photogallerychallenge.util.EventObserver
-import com.example.revoluttask.ViewModelFactory
+import com.example.photogallerychallenge.ViewModelFactory
 import java.net.HttpURLConnection
 
 class PhotoDetailFragment : Fragment() {
