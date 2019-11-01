@@ -3,25 +3,26 @@ package com.example.photogallerychallenge.repository
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.example.photogallerychallenge.data.model.asDatabaseModel
 import com.example.photogallerychallenge.data.model.DatabasePhoto
-import com.example.photogallerychallenge.data.model.DatabaseUser
-import com.example.photogallerychallenge.data.local.database.UnsplashLocalCache
+import com.example.photogallerychallenge.data.local.database.UnsplashLocalDataSource
+import com.example.photogallerychallenge.data.model.asDatabaseModel
 import com.example.photogallerychallenge.data.network.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-class UnsplashRepository(private val service: UnsplashApiService, private val cache: UnsplashLocalCache) {
+// Should not need a device to run
+class UnsplashRepository(private val remoteDataSource: UnsplashRemoteDataSource, private val localDataSource: UnsplashLocalDataSource) :
+    Repository {
 
     private lateinit var boundaryCallback: PhotoBoundaryCallback
 
-    fun loadPhotos(): LoadPhotosResult {
+    override fun loadPhotos(): Result<PagedList<DatabasePhoto>> {
         Timber.d("loadPhotos")
 
-        val dataSourceFactory = cache.getPhotos()
+        val dataSourceFactory = localDataSource.getPhotos()
 
-        boundaryCallback = PhotoBoundaryCallback(service, cache)
+        boundaryCallback = PhotoBoundaryCallback(remoteDataSource, localDataSource)
 
         val dateLoading = boundaryCallback.dataLoading
         val networkError = boundaryCallback.networkError
@@ -35,35 +36,34 @@ class UnsplashRepository(private val service: UnsplashApiService, private val ca
             .setBoundaryCallback(boundaryCallback)
             .build()
 
-        return LoadPhotosResult(data, dateLoading, networkError)
+        return Result(data, dateLoading, networkError)
     }
 
-    fun reloadPhotos() {
+    override fun reloadPhotos() {
         boundaryCallback.requestAndSaveData()
     }
 
-    suspend fun loadPhoto(photoId: String, liveDataPhoto: MutableLiveData<DatabasePhoto>, dataLoading: MutableLiveData<Boolean>, error: MutableLiveData<UnsplashAPIError>) {
+    override suspend fun loadPhoto(photoId: String): Result<DatabasePhoto> {
+        val dataLoading = MutableLiveData<Boolean>()
+        val liveDatadatabasePhoto = MutableLiveData<DatabasePhoto>()
+        val error = MutableLiveData<UnsplashAPIError>()
+
         withContext(Dispatchers.IO) {
 
-            dataLoading.postValue(true)
+            liveDatadatabasePhoto.postValue(localDataSource.getPhoto(photoId))
 
-            UnsplashApiHelper.getPhoto(service, photoId, { networkPhotoContainer ->
-
-                dataLoading.postValue(false)
+            remoteDataSource.getPhoto(photoId, { networkPhotoContainer ->
 
                 val databasePhoto = networkPhotoContainer.asDatabaseModel()
-                liveDataPhoto.postValue(databasePhoto)
+                liveDatadatabasePhoto.postValue(databasePhoto)
 
-                cache.updatePhoto(databasePhoto)
+                localDataSource.updatePhoto(databasePhoto)
             }, {
-                dataLoading.postValue(false)
-
-                // if a network error occurs, get the photo from DB instead
-                liveDataPhoto.postValue(cache.getPhoto(photoId))
-
                 error.postValue(it)
             })
         }
+
+        return Result(liveDatadatabasePhoto, dataLoading, error)
     }
 
     companion object {

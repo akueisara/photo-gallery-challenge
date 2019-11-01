@@ -34,7 +34,7 @@ class PhotoDetailFragment : Fragment() {
         viewModel.getPhoto(args.photoId)
 
         viewModel.error.observe(this, Observer {
-            if(it.message.contains(HttpURLConnection.HTTP_FORBIDDEN.toString())) {
+            if(it != null && it.message.contains(HttpURLConnection.HTTP_FORBIDDEN.toString())) {
                 Toast.makeText(
                     context,
                     getString(R.string.api_rate_limit_error),

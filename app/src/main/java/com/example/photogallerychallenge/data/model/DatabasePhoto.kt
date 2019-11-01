@@ -25,6 +25,6 @@ data class DatabasePhoto(
     var user_username: String,
     var user_profile_image_url: String?,
     @Embedded var exif: ExtraInfo?,
-    @Embedded val location: Location?,
-    val views: Long?,
-    val downloads: Long?)
+    @Embedded var location: Location?,
+    var views: Long?,
+    var downloads: Long?)

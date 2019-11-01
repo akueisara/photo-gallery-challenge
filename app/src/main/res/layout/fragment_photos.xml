@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="@{viewmodel.networkError != null &amp;&amp; viewmodel.photos.size() == 0 ? View.VISIBLE : View.GONE}">
+            android:visibility="@{!viewmodel.dataLoading &amp;&amp; viewmodel.error != null &amp;&amp; viewmodel.photos.size() == 0 ? View.VISIBLE : View.GONE}">
 
             <TextView
                 android:layout_width="wrap_content"

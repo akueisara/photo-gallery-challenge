@@ -20,7 +20,6 @@ import com.example.revoluttask.ViewModelFactory
 import timber.log.Timber
 import java.net.HttpURLConnection
 
-
 class PhotosFragment : Fragment() {
 
     private val viewModel by viewModels<PhotosViewModel> { ViewModelFactory(Injection.provideUnsplashRepository(context!!)) }
@@ -76,8 +75,8 @@ class PhotosFragment : Fragment() {
         initListAdapter()
         setupNavigation()
 
-        viewModel.networkError.observe(this, Observer {
-            if(it.code != null && it.code == HttpURLConnection.HTTP_FORBIDDEN) {
+        viewModel.error.observe(this, Observer {
+            if(it?.code != null && it.code == HttpURLConnection.HTTP_FORBIDDEN) {
                 Toast.makeText(context, getString(R.string.api_rate_limit_error), Toast.LENGTH_SHORT).show()
             }
         })
