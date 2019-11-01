@@ -31,11 +31,7 @@ class PhotoDetailFragment : Fragment() {
         }
         viewDataBinding.lifecycleOwner = this.viewLifecycleOwner
 
-        viewModel.start(args.photoId)
-
-        viewModel.photoId.observe(this, Observer {
-            viewModel.start(it)
-        })
+        viewModel.getPhoto(args.photoId)
 
         viewModel.error.observe(this, Observer {
             if(it.message.contains(HttpURLConnection.HTTP_FORBIDDEN.toString())) {

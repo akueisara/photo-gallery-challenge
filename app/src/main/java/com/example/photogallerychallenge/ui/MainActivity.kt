@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity(), NetworkConnectionReceiver.NetworkConne
 
     private lateinit var dataBinding: ActivityMainBinding
 
-    private lateinit var networkConnectionReceiver: NetworkConnectionReceiver
+    private var networkConnectionReceiver: NetworkConnectionReceiver? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +31,9 @@ class MainActivity : AppCompatActivity(), NetworkConnectionReceiver.NetworkConne
 
     override fun onPause() {
         super.onPause()
-        unregisterReceiver(networkConnectionReceiver)
+        if(networkConnectionReceiver != null) {
+            unregisterReceiver(networkConnectionReceiver)
+        }
     }
 
     override fun onNetworkConnectionChanged(isConnected: Boolean) {

@@ -29,21 +29,13 @@ class PhotoDetailViewModel(private val repository: UnsplashRepository) : ViewMod
     private val _dataLoading = MutableLiveData<Boolean>()
     val dataLoading: LiveData<Boolean> = _dataLoading
 
-    private val _photoId = MutableLiveData<String>()
-    val photoId: LiveData<String> = _photoId
-
     private val _photoViewerImageViewUrl = MutableLiveData<String>()
     val photoViewerImageViewUrl: LiveData<String> = _photoViewerImageViewUrl
 
-    fun start(photoId: String?) {
-        photoId?.let {
-            viewModelScope.launch {
-                repository.loadPhoto(photoId, _photo, _dataLoading, _error)
-            }
-        }
-    }
-
     fun getPhoto(photoId: String?) {
+        if(photo.value?.views != null) {
+            return
+        }
         photoId?.let {
             viewModelScope.launch {
                 repository.loadPhoto(photoId, _photo, _dataLoading, _error)
