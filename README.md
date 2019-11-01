@@ -5,8 +5,8 @@
 * Fetches images from Unsplash.com via their API
 * Written in Kotlin
 * MVVM Architecture
-* Uses **Retrofit**, **OkHTTP** & **Glide** libraries
-* Offline viewing support via a local database built with **Room**
+* Uses ***Retrofit***, ***OkHTTP*** & ***Glide*** libraries
+* Offline viewing support via a local database built with ***Room***
 * Limited unit testing (mostly local)
 
 
@@ -14,15 +14,17 @@
 
 The app displays images in two layouts
 > * **Full-width** or **Grid tiles**
+> > ![](demo_1.gif)
 
-![](demo_1.gif)
 
 Supports limited offline viewing by using a local database to store image URLS and metadata
 > * Images which are still in Glide's cache will be displayed
 > * Prompt for the user to reconnect
+> > ![](demo_2.gif)
 
 
-![](demo_2.gif)
+
+
 
 ## Installation:
 
@@ -43,8 +45,8 @@ Compile and run the app via Android Studio.
 
 * Add more Unit testing with *JVM testing* and *Instrumented testing*
 * Implement a search bar
-* Like/Unlike or add to favorites function
+* 'Like' / 'Unlike' or 'add to favorites' function
 
 ## Credits:
 
-<div>Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/"             title="Flaticon">www.flaticon.com</a></div>
+<div>Icons made by <a href="https://www.flaticon.com/authors/google" title="Google">Google</a> from <a href="https://www.flaticon.com/"title="Flaticon">www.flaticon.com</a></div>
