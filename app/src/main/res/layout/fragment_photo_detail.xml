@@ -222,7 +222,7 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        app:infoText="@{viewmodel.photo.exif.focalLength}"
+                                        app:infoFocalLength="@{viewmodel.photo.exif.focalLength}"
                                         tools:text="50.0\mm" />
 
                                 </LinearLayout>
@@ -246,7 +246,7 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        app:infoText="@{viewmodel.photo.exif.aperture}"
+                                        app:infoAperture="@{viewmodel.photo.exif.aperture}"
                                         tools:text="ƒ/3.2" />
 
                                 </LinearLayout>
@@ -262,7 +262,7 @@
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        app:infoText="@{viewmodel.photo.exif.exposureTime}"
+                                        app:infoSpeed="@{viewmodel.photo.exif.exposureTime}"
                                         tools:text="1/160s" />
 
                                 </LinearLayout>

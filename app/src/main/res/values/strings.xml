@@ -27,6 +27,10 @@
     <string name="load_photo_error">Unable to load the photo info</string>
     <string name="try_again">Try Again</string>
     <string name="location_des">%s, %s</string>
+    <string name="focal_length_des">%smm</string>
+    <string name="aperture_des">f/%s</string>
+    <string name="speed_des">%ss</string>
     <string name="dimensions_des">%d x %d</string>
+    <string name="none">None</string>
 
 </resources>
