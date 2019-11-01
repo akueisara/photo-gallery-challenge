@@ -5,10 +5,9 @@
 * Fetches images from Unsplash.com via their API
 * Written in Kotlin
 * MVVM Architecture
-* Uses ***Retrofit***, ***OkHTTP*** & ***Glide*** libraries
+* Uses ***Retrofit2***, ***OkHTTP3***, ***Moshi*** & ***Glide*** & ***Timber*** libraries
 * Offline viewing support via a local database built with ***Room***
 * Limited unit testing (mostly local)
-
 
 ## Screenshots:
 
@@ -23,9 +22,6 @@ Supports limited offline viewing by using a local database to store image URLS a
 > > ![](demo_2.gif)
 
 
-
-
-
 ## Installation:
 
 The app needs to be initialized with an Unsplash API key. You can generate a new API key by registering an account and following the instructions at https://unsplash.com/developers .
@@ -38,12 +34,12 @@ Once you have your API key, insert it into the **`./photo-gallery-challenge/keys
 
 Compile and run the app via Android Studio.
 
-*For convenience, there is pre-compiled APK also included in the `./BUILD` folder*
+*For convenience, there is pre-compiled APK also included in the [release](https://github.com/akueisara/photo-gallery-challenge/releases) page*
 
 
 ## Roadmap for improvements:
 
-* Add more Unit testing with *JVM testing* and *Instrumented testing*
+* Add more local and instrumented unit tests
 * Implement a search bar
 * 'Like' / 'Unlike' or 'add to favorites' function
 
