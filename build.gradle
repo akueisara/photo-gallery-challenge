@@ -63,6 +63,7 @@ ext {
     legacySupportVersion = '1.0.0'
     lifecycleVersion = '2.1.0'
     mockkVersion = '1.9.kotlin12'
+    mockitoVersion = '2.8.9'
     moshiVersion = '1.8.0'
     multidexVersion = '1.0.3'
     navigationVersion = '2.1.0'
