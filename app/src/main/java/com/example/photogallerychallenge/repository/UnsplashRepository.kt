@@ -17,13 +17,16 @@ class UnsplashRepository(private val remoteDataSource: UnsplashRemoteDataSource,
 
     private lateinit var boundaryCallback: PhotoBoundaryCallback
 
-    override fun loadPhotos(): Result<PagedList<DatabasePhoto>> {
+    override fun loadPhotos(query: String, forceUpdate: Boolean): Result<PagedList<DatabasePhoto>> {
         Timber.d("loadPhotos")
+
+        if(forceUpdate) {
+            localDataSource.clearPhotos()
+        }
 
         val dataSourceFactory = localDataSource.getPhotos()
 
-        boundaryCallback = PhotoBoundaryCallback(remoteDataSource, localDataSource)
-
+        boundaryCallback = PhotoBoundaryCallback(query, remoteDataSource, localDataSource)
         val dateLoading = boundaryCallback.dataLoading
         val networkError = boundaryCallback.networkError
 
@@ -39,8 +42,8 @@ class UnsplashRepository(private val remoteDataSource: UnsplashRemoteDataSource,
         return Result(data, dateLoading, networkError)
     }
 
-    override fun reloadPhotos() {
-        boundaryCallback.requestAndSaveData()
+    override fun reloadPhotos(query: String) {
+        boundaryCallback.requestAndSaveData(query)
     }
 
     override suspend fun loadPhoto(photoId: String): Result<DatabasePhoto> {

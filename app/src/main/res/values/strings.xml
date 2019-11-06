@@ -8,6 +8,7 @@
 
 
     <!-- Photos Fragment -->
+    <string name="search_hint">Search</string>
     <string name="no_photo">No Photos Result</string>
     <string name="show_list">Show List</string>
     <string name="show_grid">Show Grid</string>

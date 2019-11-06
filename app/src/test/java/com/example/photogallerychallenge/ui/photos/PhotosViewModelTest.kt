@@ -52,7 +52,7 @@ class PhotosViewModelTest {
     @Test
     fun loadPhotos_setsLoadPhotosResult() {
 
-        photosViewModel.loadPhotos()
+        photosViewModel.loadPhotos("")
 
         val loadPhotosResult = photosViewModel.loadPhotosResult.getOrAwaitValue()
 

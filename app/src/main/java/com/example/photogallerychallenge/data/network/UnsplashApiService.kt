@@ -17,6 +17,7 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import com.example.photogallerychallenge.data.model.NetworkPhotoContainer
 import com.example.photogallerychallenge.data.model.NetworkPhotosContainer
+import com.example.photogallerychallenge.data.model.SearchResult
 import kotlinx.coroutines.Deferred
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
@@ -30,6 +31,11 @@ interface UnsplashApiService {
 
     @GET("photos/{id}")
     fun getPhoto(@Path("id") id: String, @Query("client_id") clientId: String): Deferred<Photo>
+
+    @GET("search/photos")
+    fun searchPhotos(@Query("client_id") clientId: String,
+                 @Query("page") page: Int?,
+                 @Query("per_page") pageSize: Int?, @Query("query")query: String): Call<SearchResult>
 }
 
 object UnsplashApi {

@@ -12,4 +12,6 @@ interface UnsplashLocalDataSource {
     fun getPhoto(photoId: String): DatabasePhoto?
 
     fun updatePhoto(photo: DatabasePhoto)
+
+    fun clearPhotos()
 }

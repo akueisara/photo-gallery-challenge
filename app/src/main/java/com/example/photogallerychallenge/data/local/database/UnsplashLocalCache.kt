@@ -33,4 +33,11 @@ class UnsplashLocalCache(private val unsplashDao: UnsplashDao, private val ioExe
             Timber.d("Update photo $photo row $updateRow")
         }
     }
+
+    override fun clearPhotos() {
+        ioExecutor.execute {
+            unsplashDao.clearPhotos()
+            Timber.d("clearPhotos")
+        }
+    }
 }

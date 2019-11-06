@@ -20,6 +20,9 @@ interface UnsplashDao {
     @Update
     fun updatePhoto(photo: DatabasePhoto)
 
+    @Query("DELETE FROM photos")
+    fun clearPhotos()
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertUser(user: DatabaseUser)
 

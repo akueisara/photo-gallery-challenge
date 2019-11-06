@@ -1,9 +1,14 @@
 package com.example.photogallerychallenge.ui.photos
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.EditorInfo
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -17,6 +22,9 @@ import com.example.photogallerychallenge.util.EventObserver
 import com.example.photogallerychallenge.data.local.prefs.PreferencesHelper
 import com.example.photogallerychallenge.databinding.FragmentPhotosBinding
 import com.example.photogallerychallenge.ViewModelFactory
+import com.example.photogallerychallenge.util.hideKeyboard
+import com.example.photogallerychallenge.util.setInfoText
+import kotlinx.android.synthetic.main.fragment_photos.*
 import timber.log.Timber
 import java.net.HttpURLConnection
 
@@ -31,6 +39,8 @@ class PhotosFragment : Fragment() {
     private lateinit var layoutManager: StaggeredGridLayoutManager
 
     private var photoViewType: Int = PhotoViewType.LIST.value
+
+    private lateinit var lastQueryString: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewDataBinding = FragmentPhotosBinding.inflate(inflater, container, false).apply {
@@ -75,11 +85,47 @@ class PhotosFragment : Fragment() {
         initListAdapter()
         setupNavigation()
 
-        viewModel.error.observe(this, Observer {
-            if(it?.code != null && it.code == HttpURLConnection.HTTP_FORBIDDEN) {
-                Toast.makeText(context, getString(R.string.api_rate_limit_error), Toast.LENGTH_SHORT).show()
+        context?.let {
+            lastQueryString = PreferencesHelper(it).getLastQuery()
+            viewModel.loadPhotos(lastQueryString)
+            initSearch(lastQueryString)
+        }
+    }
+
+    private fun initSearch(query: String) {
+        search_repo.setText(query)
+
+        search_repo.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                hideKeyboard()
+                updateRepoListFromInput()
+                true
+            } else {
+                false
             }
-        })
+        }
+        search_repo.setOnKeyListener { _, keyCode, event ->
+            if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                hideKeyboard()
+                updateRepoListFromInput()
+                true
+            } else {
+                false
+            }
+        }
+    }
+
+    private fun updateRepoListFromInput() {
+        search_repo.text.trim().let { charSequence ->
+            if(lastQueryString != charSequence.toString()) {
+                Timber.d("Query: $charSequence")
+                lastQueryString = charSequence.toString()
+                context?.let { PreferencesHelper(it).setLastQuery(charSequence.toString()) }
+                photos_recycler_view.smoothScrollToPosition(0)
+                viewModel.loadPhotos(charSequence.toString(), true)
+                listAdapter.submitList(null)
+            }
+        }
     }
 
     private fun setupNavigation() {
@@ -107,6 +153,11 @@ class PhotosFragment : Fragment() {
                         if(recyclerViewReachTheEnd(viewDataBinding.photosRecyclerView)) {
                             viewModel.reloadPhotos()
                         }
+                    }
+                })
+                viewModel.error.observe(this, Observer {
+                    if(it?.code != null && it.code == HttpURLConnection.HTTP_FORBIDDEN) {
+                        Toast.makeText(context, getString(R.string.api_rate_limit_error), Toast.LENGTH_SHORT).show()
                     }
                 })
             }
