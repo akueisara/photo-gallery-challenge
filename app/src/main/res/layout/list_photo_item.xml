@@ -57,6 +57,10 @@
                 android:visibility="@{photo.description.length() == 0 ? View.GONE : View.VISIBLE}"
                 tools:text="Kuei Jung Hu" />
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="400dp">
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_photo"
@@ -65,6 +69,16 @@
                 app:backgroundHexColor="@{photo.color}"
                 app:imageUrl="@{photo.urls.regular}"
                 tools:src="@tools:sample/avatars" />
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    app:likeImage="@{photo.liked_by_user}"
+                    android:onClick="@{() -> viewmodel.likePhoto(photo)}"/>
+
+            </RelativeLayout>
 
         </LinearLayout>
 

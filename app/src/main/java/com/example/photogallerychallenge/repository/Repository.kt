@@ -9,4 +9,8 @@ interface Repository {
     fun reloadPhotos(query: String)
 
     suspend fun loadPhoto(photoId: String): Result<DatabasePhoto>
+
+    suspend fun likePhoto(photoId: String): Result<DatabasePhoto>
+
+    suspend fun unlikePhoto(photoId: String): Result<DatabasePhoto>
 }

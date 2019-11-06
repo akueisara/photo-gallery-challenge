@@ -69,6 +69,46 @@ class UnsplashRepository(private val remoteDataSource: UnsplashRemoteDataSource,
         return Result(liveDatadatabasePhoto, dataLoading, error)
     }
 
+    override suspend fun likePhoto(photoId: String): Result<DatabasePhoto> {
+        val dataLoading = MutableLiveData<Boolean>()
+        val liveDatadatabasePhoto = MutableLiveData<DatabasePhoto>()
+        val error = MutableLiveData<UnsplashAPIError>()
+
+        withContext(Dispatchers.IO) {
+            remoteDataSource.likePhoto(photoId, { networkPhotoContainer ->
+
+                val databasePhoto = networkPhotoContainer.asDatabaseModel()
+                liveDatadatabasePhoto.postValue(databasePhoto)
+
+                localDataSource.updatePhotoLikeStatus(databasePhoto.id, true)
+            }, {
+                error.postValue(it)
+            })
+        }
+
+        return Result(liveDatadatabasePhoto, dataLoading, error)
+    }
+
+    override suspend fun unlikePhoto(photoId: String): Result<DatabasePhoto> {
+        val dataLoading = MutableLiveData<Boolean>()
+        val liveDatadatabasePhoto = MutableLiveData<DatabasePhoto>()
+        val error = MutableLiveData<UnsplashAPIError>()
+
+        withContext(Dispatchers.IO) {
+            remoteDataSource.unlikePhoto(photoId, { networkPhotoContainer ->
+
+                val databasePhoto = networkPhotoContainer.asDatabaseModel()
+                liveDatadatabasePhoto.postValue(databasePhoto)
+
+                localDataSource.updatePhotoLikeStatus(databasePhoto.id, false)
+            }, {
+                error.postValue(it)
+            })
+        }
+
+        return Result(liveDatadatabasePhoto, dataLoading, error)
+    }
+
     companion object {
         private const val DATABASE_PAGE_SIZE = 100
     }

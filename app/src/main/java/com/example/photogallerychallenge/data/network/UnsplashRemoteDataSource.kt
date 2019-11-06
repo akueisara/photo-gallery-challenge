@@ -8,7 +8,16 @@ interface UnsplashRemoteDataSource {
                    onSuccess: (networkPhotosContainer: NetworkPhotosContainer) -> Unit,
                    onError: (UnsplashAPIError) -> Unit)
 
+    suspend fun likePhoto(photoId: String,
+                          onSuccess: (networkPhotoContainer: NetworkPhotoContainer) -> Unit,
+                          onError: (error: UnsplashAPIError) -> Unit)
+
+    suspend fun unlikePhoto(photoId: String,
+                            onSuccess: (networkPhotoContainer: NetworkPhotoContainer) -> Unit,
+                            onError: (error: UnsplashAPIError) -> Unit)
+
     suspend fun getPhoto(photoId: String,
                          onSuccess: (networkPhotoContainer: NetworkPhotoContainer) -> Unit,
                          onError: (error: UnsplashAPIError) -> Unit)
+
 }

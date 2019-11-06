@@ -13,5 +13,7 @@ interface UnsplashLocalDataSource {
 
     fun updatePhoto(photo: DatabasePhoto)
 
+    fun updatePhotoLikeStatus(photoId: String, liked: Boolean)
+
     fun clearPhotos()
 }

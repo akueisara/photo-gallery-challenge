@@ -22,7 +22,7 @@ class UnsplashApiDataSource(private val service: UnsplashApiService): UnsplashRe
 
 
         if(query.isEmpty()) {
-            service.getPhotos(BuildConfig.UNSPLASH_API_ACCESS_KEY, page, itemsPerPage).enqueue(
+            service.getPhotos(page, itemsPerPage).enqueue(
                 object : Callback<List<Photo>> {
                     override fun onFailure(call: Call<List<Photo>>?, t: Throwable) {
                         val error = UnsplashAPIError(t)
@@ -50,7 +50,7 @@ class UnsplashApiDataSource(private val service: UnsplashApiService): UnsplashRe
                     }
                 })
         } else {
-            service.searchPhotos(BuildConfig.UNSPLASH_API_ACCESS_KEY, page, itemsPerPage, query).enqueue(
+            service.searchPhotos(page, itemsPerPage, query).enqueue(
                 object : Callback<SearchResult> {
                     override fun onFailure(call: Call<SearchResult>?, t: Throwable) {
                         val error = UnsplashAPIError(t)
@@ -80,6 +80,30 @@ class UnsplashApiDataSource(private val service: UnsplashApiService): UnsplashRe
         }
     }
 
+    override suspend fun likePhoto(photoId: String, onSuccess: (networkPhotoContainer: NetworkPhotoContainer) -> Unit,
+                           onError: (UnsplashAPIError) -> Unit) {
+        try {
+            val result = service.likePhoto(photoId).await()
+            onSuccess(NetworkPhotoContainer(result.photo))
+        } catch (e: Exception) {
+            val error = UnsplashAPIError(e)
+            Timber.d( "error: ${error.code} ${error.message}")
+            onError(error)
+        }
+    }
+
+    override suspend fun unlikePhoto(photoId: String, onSuccess: (networkPhotoContainer: NetworkPhotoContainer) -> Unit,
+                             onError: (UnsplashAPIError) -> Unit) {
+        try {
+            val result = service.unlikePhoto(photoId).await()
+            onSuccess(NetworkPhotoContainer(result.photo))
+        } catch (e: Exception) {
+            val error = UnsplashAPIError(e)
+            Timber.d( "error: ${error.code} ${error.message}")
+            onError(error)
+        }
+    }
+
     override suspend fun getPhoto(photoId: String,
                          onSuccess: (networkPhotoContainer: NetworkPhotoContainer) -> Unit,
                          onError: (error: UnsplashAPIError) -> Unit) {
@@ -87,7 +111,7 @@ class UnsplashApiDataSource(private val service: UnsplashApiService): UnsplashRe
         Timber.d("get photo $photoId from Network")
 
         try {
-            val photo = service.getPhoto(photoId, BuildConfig.UNSPLASH_API_ACCESS_KEY).await()
+            val photo = service.getPhoto(photoId).await()
             onSuccess(NetworkPhotoContainer(photo))
         } catch (e: Exception) {
             Timber.d( "fail to get data")
