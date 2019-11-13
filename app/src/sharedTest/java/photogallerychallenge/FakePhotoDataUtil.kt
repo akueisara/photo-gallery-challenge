@@ -71,7 +71,7 @@ fun getFakePhoto(id: String): Photo {
     )
 }
 
-fun getFakeDatabasePhoto(id: String): DatabasePhoto {
+fun getFakeDatabasePhoto(id: String, userName: String = "Daniel Olah"): DatabasePhoto {
     val urls = Urls(
         "https://images.unsplash.com/photo-1572072393749-3ca9c8ea0831?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&ixid=eyJhcHBfaWQiOjk3OTUyfQ",
         "https://images.unsplash.com/photo-1572072393749-3ca9c8ea0831?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=400&fit=max&ixid=eyJhcHBfaWQiOjk3OTUyfQ",
@@ -120,7 +120,7 @@ fun getFakeDatabasePhoto(id: String): DatabasePhoto {
         "WqEryhdhOsY",
         "2019-10-26T04:42:06-04:00",
         "danesduet",
-        "Daniel Olah",
+        userName,
         "danesduet",
         null,
         "Capturing the future",

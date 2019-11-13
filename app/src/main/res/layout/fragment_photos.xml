@@ -13,53 +13,77 @@
 
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         tools:context=".ui.photos.PhotosFragment">
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="@{!viewmodel.dataLoading &amp;&amp; viewmodel.error != null &amp;&amp; viewmodel.photos.size() == 0 ? View.VISIBLE : View.GONE}">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/no_photo"
-                android:textSize="@dimen/textSize_no_photo" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/marginTop_button_reload"
-                android:drawableStart="@drawable/ic_reload"
-                android:drawablePadding="@dimen/drawablePadding_button"
-                android:onClick="@{() -> viewmodel.reloadPhotos()}"
-                android:scaleType="fitCenter"
-                android:text="@string/reload" />
-
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/photos_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:visibility="@{viewmodel.photos.size() > 0  ? View.VISIBLE : View.GONE}"
-            app:items="@{viewmodel.photos}"
-            tools:listitem="@layout/list_photo_item" />
-
-        <ProgressBar
-            android:id="@+id/loading_spinner"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="@{viewmodel.dataLoading &amp;&amp; viewmodel.photos.size() == 0 ? View.VISIBLE : View.GONE}" />
+            android:layout_margin="8dp">
 
-    </FrameLayout>
+            <EditText
+                android:id="@+id/search_repo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/search_hint"
+                android:imeOptions="actionSearch"
+                android:inputType="textNoSuggestions"
+                tools:text="Android"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="@{!viewmodel.dataLoading &amp;&amp; viewmodel.error != null &amp;&amp; viewmodel.photos.size() == 0 ? View.VISIBLE : View.GONE}">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/no_photo"
+                    android:textSize="@dimen/textSize_no_photo" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/marginTop_button_reload"
+                    android:drawableStart="@drawable/ic_reload"
+                    android:drawablePadding="@dimen/drawablePadding_button"
+                    android:onClick="@{() -> viewmodel.reloadPhotos()}"
+                    android:scaleType="fitCenter"
+                    android:text="@string/reload" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/photos_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:visibility="@{viewmodel.photos.size() > 0  ? View.VISIBLE : View.GONE}"
+                app:items="@{viewmodel.photos}"
+                tools:listitem="@layout/list_photo_item" />
+
+            <ProgressBar
+                android:id="@+id/loading_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="@{viewmodel.dataLoading &amp;&amp; viewmodel.photos.size() == 0 ? View.VISIBLE : View.GONE}" />
+
+        </FrameLayout>
+
+    </LinearLayout>
 
 </layout>

@@ -9,7 +9,7 @@ import com.example.photogallerychallenge.data.network.UnsplashAPIError
 import com.example.photogallerychallenge.data.network.UnsplashRemoteDataSource
 import timber.log.Timber
 
-class PhotoBoundaryCallback(private val remoteDataSource: UnsplashRemoteDataSource, private val localDataSource: UnsplashLocalDataSource) : PagedList.BoundaryCallback<DatabasePhoto>() {
+class PhotoBoundaryCallback(private val query: String, private val remoteDataSource: UnsplashRemoteDataSource, private val localDataSource: UnsplashLocalDataSource) : PagedList.BoundaryCallback<DatabasePhoto>() {
 
     companion object {
         private const val NETWORK_PAGE_SIZE = 30
@@ -25,20 +25,20 @@ class PhotoBoundaryCallback(private val remoteDataSource: UnsplashRemoteDataSour
 
     override fun onZeroItemsLoaded() {
         Timber.d("onZeroItemsLoaded")
-        requestAndSaveData()
+        requestAndSaveData(query = query)
     }
 
     override fun onItemAtEndLoaded(itemAtEnd: DatabasePhoto) {
         Timber.d("onItemAtEndLoaded")
-        requestAndSaveData()
+        requestAndSaveData(query = query)
     }
 
-    fun requestAndSaveData() {
+    fun requestAndSaveData(query: String) {
         if(_dataLoading.value == true) {
             return
         }
         _dataLoading.value = true
-        remoteDataSource.loadPhotos(lastRequestedPage, NETWORK_PAGE_SIZE, { networkPhotoContainer ->
+        remoteDataSource.loadPhotos(lastRequestedPage, NETWORK_PAGE_SIZE, query, { networkPhotoContainer ->
             localDataSource.insert(networkPhotoContainer) {
                     lastRequestedPage++
                     _dataLoading.postValue(false)

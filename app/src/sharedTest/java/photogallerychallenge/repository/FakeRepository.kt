@@ -21,15 +21,15 @@ class FakeRepository: Repository {
     private val observablePhoto = MutableLiveData<DatabasePhoto>()
 
     // Rest of class
-    override fun loadPhotos(): Result<PagedList<DatabasePhoto>> {
+    override fun loadPhotos(query: String, forceUpdate: Boolean): Result<PagedList<DatabasePhoto>> {
         observablePhotos.value = photosServiceData.values.toList().asPagedList()
         observableDataLoading.value = false
         observableError.value = null
         return Result(observablePhotos, observableDataLoading, observableError)
     }
 
-    override fun reloadPhotos() {
-        observablePhotos.value = loadPhotos().data.value
+    override fun reloadPhotos(query: String) {
+        observablePhotos.value = loadPhotos(query, false).data.value
     }
 
     override suspend fun loadPhoto(photoId: String): Result<DatabasePhoto> {
@@ -50,7 +50,7 @@ class FakeRepository: Repository {
             photosServiceData[count] = photo
             count += 1
         }
-        reloadPhotos()
+        reloadPhotos("")
     }
 
 }

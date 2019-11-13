@@ -3,6 +3,7 @@ package com.example.photogallerychallenge.ui.photos
 import androidx.lifecycle.*
 import androidx.paging.PagedList
 import com.example.photogallerychallenge.data.model.DatabasePhoto
+import com.example.photogallerychallenge.data.model.Photo
 import com.example.photogallerychallenge.data.network.UnsplashAPIError
 import com.example.photogallerychallenge.repository.Repository
 import com.example.photogallerychallenge.util.Event
@@ -22,19 +23,28 @@ class PhotosViewModel(private val repository: Repository) : ViewModel() {
     private val _openPhotoEvent = MutableLiveData<Event<String>>()
     val openPhotoEvent: LiveData<Event<String>> = _openPhotoEvent
 
-    init {
-        loadPhotos()
-    }
+    private var lastQuery = ""
 
-    fun loadPhotos()  {
-        _loadPhotosResult.value =  repository.loadPhotos()
+    fun loadPhotos(queryString: String, forceUpdate: Boolean = false)  {
+        lastQuery = queryString
+        _loadPhotosResult.value =  repository.loadPhotos(queryString, forceUpdate)
     }
 
     fun reloadPhotos() {
-        repository.reloadPhotos()
+        repository.reloadPhotos(lastQuery)
     }
 
     fun openPhoto(photoId: String) {
         _openPhotoEvent.value = Event(photoId)
+    }
+
+    fun likePhoto(databasePhoto: DatabasePhoto) {
+        viewModelScope.launch {
+            if(databasePhoto.liked_by_user) {
+                repository.unlikePhoto(databasePhoto.id)
+            } else {
+                repository.likePhoto(databasePhoto.id)
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ import com.example.photogallerychallenge.ui.photos.PhotoViewType
 class PreferencesHelper(val context: Context) {
     companion object {
         const val PREF_PHOTO_VIEW_TYPE = "photo_view_type"
+        const val PREF_LAST_QUERY = "photo_last_query"
     }
 
     private val PREFS_NAME = "com.example.photogallerychallenge"
@@ -20,5 +21,12 @@ class PreferencesHelper(val context: Context) {
         sharedPref.edit().putInt(PREF_PHOTO_VIEW_TYPE, photoViewType).apply()
     }
 
+    fun getLastQuery(): String {
+        return sharedPref.getString(PREF_LAST_QUERY, "") ?: ""
+    }
+
+    fun setLastQuery(queryString: String) {
+        sharedPref.edit().putString(PREF_LAST_QUERY, queryString).apply()
+    }
 
 }

@@ -1,7 +1,7 @@
 package com.example.photogallerychallenge.data.network
 
 import com.example.photogallerychallenge.BuildConfig
-import com.example.photogallerychallenge.data.model.Photo
+import com.example.photogallerychallenge.data.model.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -10,26 +10,31 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.*
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
-import com.example.photogallerychallenge.data.model.NetworkPhotoContainer
-import com.example.photogallerychallenge.data.model.NetworkPhotosContainer
 import kotlinx.coroutines.Deferred
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import retrofit2.http.*
 
 
 interface UnsplashApiService {
 
     @GET("photos")
-    fun getPhotos(@Query("client_id") clientId: String,
-                  @Query("page") page: Int?,
+    fun getPhotos(@Query("page") page: Int?,
                   @Query("per_page") pageSize: Int?): Call<List<Photo>>
 
     @GET("photos/{id}")
-    fun getPhoto(@Path("id") id: String, @Query("client_id") clientId: String): Deferred<Photo>
+    fun getPhoto(@Path("id") id: String): Deferred<Photo>
+
+    @POST("/photos/{id}/like")
+    fun likePhoto(@Path("id") id: String): Deferred<FavoritePhotoResult>
+
+    @DELETE("/photos/{id}/like")
+    fun unlikePhoto(@Path("id") id: String): Deferred<FavoritePhotoResult>
+
+    @GET("search/photos")
+    fun searchPhotos(@Query("page") page: Int?,
+                 @Query("per_page") pageSize: Int?, @Query("query")query: String): Call<SearchResult>
 }
 
 object UnsplashApi {
@@ -50,6 +55,7 @@ object UnsplashApi {
             val newRequest = chain.request().newBuilder()
                 .addHeader(CONTENT_TYPE, APPLICATION_JSON)
                 .addHeader(ACCEPT_VERSION, API_VER)
+                .addHeader("Authorization", "Bearer " + BuildConfig.UNSPLASH_API_ACCESS_KEY)
                 .build()
             chain.proceed(newRequest)
         }

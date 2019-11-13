@@ -31,6 +31,15 @@ fun setItems(listView: RecyclerView, items: PagedList<DatabasePhoto>?) {
     }
 }
 
+@BindingAdapter("likeImage")
+fun setLikeImage(imageView: ImageView, liked: Boolean) {
+    if(liked) {
+        imageView.setImageResource(android.R.drawable.star_on)
+    } else {
+        imageView.setImageResource(android.R.drawable.star_off)
+    }
+}
+
 @BindingAdapter("imageUrl")
 fun setImageUrl(imageView: ImageView, url: String?) {
     url?.let {

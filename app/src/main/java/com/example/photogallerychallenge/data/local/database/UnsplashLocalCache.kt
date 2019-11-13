@@ -12,7 +12,9 @@ class UnsplashLocalCache(private val unsplashDao: UnsplashDao, private val ioExe
             Timber.d("inserting ${networkPhotosContainer.asDatabaseModel().size} photos")
             unsplashDao.insertPhotos(*networkPhotosContainer.asDatabaseModel())
             for(photo in networkPhotosContainer.asDomainModel()) {
-                unsplashDao.insertUser(photo.user.asDatabaseModel())
+                photo.user?.let {
+                    unsplashDao.insertUser(it.asDatabaseModel())
+                }
             }
             insertFinished()
         }
@@ -31,6 +33,24 @@ class UnsplashLocalCache(private val unsplashDao: UnsplashDao, private val ioExe
         ioExecutor.execute {
             val updateRow = unsplashDao.updatePhoto(photo)
             Timber.d("Update photo $photo row $updateRow")
+        }
+    }
+
+    override fun updatePhotoLikeStatus(photoId: String, liked: Boolean) {
+        ioExecutor.execute {
+            val databasePhoto = unsplashDao.getPhoto(photoId)
+            databasePhoto?.apply {
+                liked_by_user = liked
+                unsplashDao.updatePhoto(this)
+            }
+
+        }
+    }
+
+    override fun clearPhotos() {
+        ioExecutor.execute {
+            unsplashDao.clearPhotos()
+            Timber.d("clearPhotos")
         }
     }
 }

@@ -22,7 +22,7 @@ import org.junit.Rule
 
 @MediumTest
 @RunWith(AndroidJUnit4::class)
-@ExperimentalCoroutinesApi
+@ExperimentalCoroutinesApi // for coroutine
 class PhotoDetailFragmentTest {
 
     private lateinit var repository: Repository

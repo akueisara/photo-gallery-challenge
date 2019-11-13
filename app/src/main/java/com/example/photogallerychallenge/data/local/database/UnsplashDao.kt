@@ -11,6 +11,7 @@ interface UnsplashDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertPhotos(vararg photos: DatabasePhoto)
 
+//    @Query("SELECT * FROM photos ORDER BY liked_by_user DESC")
     @Query("SELECT * FROM photos")
     fun getPhotos(): DataSource.Factory<Int, DatabasePhoto>
 
@@ -19,6 +20,12 @@ interface UnsplashDao {
 
     @Update
     fun updatePhoto(photo: DatabasePhoto)
+
+    @Update
+    fun updatePhotoLike(photo: DatabasePhoto)
+
+    @Query("DELETE FROM photos")
+    fun clearPhotos()
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertUser(user: DatabaseUser)
